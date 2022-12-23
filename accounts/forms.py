@@ -1,6 +1,6 @@
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 
-from .models import Employee
+from .models import Employee, Team
 
 
 class EmployeeCreationForm(UserCreationForm):
@@ -14,6 +14,7 @@ class EmployeeCreationForm(UserCreationForm):
             "reg_num",
             "supervisor",
             "team",
+            "role",
         )
 
 
@@ -28,4 +29,5 @@ class EmployeeChangeForm(UserChangeForm):
             "reg_num",
             "supervisor",
             "team",
+            "role",
         )
