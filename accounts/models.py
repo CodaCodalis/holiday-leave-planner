@@ -43,15 +43,21 @@ class Team(models.Model):
         null=True,
         blank=True,
     )
-    MIN_ATTENDANCE_CHOICES = [
-        (0.0, "0%"),
-        (0.25, "25%"),
-        (0.33, "33%"),
-        (0.5, "50%"),
-        (0.66, "66%"),
-        (0.75, "75%"),
-        (1.0, "100%"),
-    ]
+
+    class MinAttendance(models.TextChoices):
+        ZERO = ("0", "0%")
+        QUARTER = ("25", "25%")
+        THIRD = ("33", "33%")
+        HALF = ("50", "50%")
+        TWOTHIRD = ("66", "66%")
+        THREEQUARTER = ("75", "75%")
+        ALL = ("100", "100%")
+
+    min_attendance = models.CharField(
+        max_length=3,
+        choices=MinAttendance.choices,
+        default=100,
+    )
 
     division = models.ForeignKey(
         "Division",
@@ -78,9 +84,15 @@ class Employee(AbstractUser):
         null=True,
         blank=True,
     )
-    ROLE_CHOICES = [
-        ("HODep", "head of department"),
-        ("HODiv", "head of division"),
-        ("HOT", "head of team"),
-        ("Emp", "employee"),
-    ]
+
+    class Role(models.TextChoices):
+        HODEP = ("HODep", "head of department")
+        HODIV = ("HODiv", "head of division")
+        HOT = ("HOT", "head of team")
+        EMP = ("Emp", "employee")
+
+    role = models.CharField(
+        max_length=5,
+        choices=Role.choices,
+        default="Emp",
+    )
