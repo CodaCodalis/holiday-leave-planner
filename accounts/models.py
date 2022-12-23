@@ -38,6 +38,7 @@ class Team(models.Model):
     name = models.CharField(max_length=30)
     head = models.ForeignKey(
         "Employee",
+        related_name='head_team',
         on_delete=models.CASCADE,
         null=True,
         blank=True,
@@ -76,7 +77,7 @@ class Employee(AbstractUser):
         null=True,
         blank=True,
     )
-    role = [
+    ROLE_CHOICES = [
         ("HODep", "head of department"),
         ("HODiv", "head of division"),
         ("HOT", "head of team"),

@@ -14,7 +14,6 @@ class EmployeeCreationForm(UserCreationForm):
             "reg_num",
             "supervisor",
             "team",
-            "role",
         )
 
 
@@ -29,5 +28,4 @@ class EmployeeChangeForm(UserChangeForm):
             "reg_num",
             "supervisor",
             "team",
-            "role",
         )

@@ -17,23 +17,23 @@ class EmployeeAdmin(UserAdmin):
         "username",
         "email",
         "reg_num",
-        "supervisor"
+        "supervisor",
         "team",
-        "role",
-        "is_staff",
+        "ROLE_CHOICES",
     ]
     fieldsets = UserAdmin.fieldsets + ((None, {"fields": ("reg_num",
                                                           "supervisor",
                                                           "team",
-                                                          "role",
+                                                          "ROLE_CHOICES",
                                                           )}),)
     add_fieldsets = UserAdmin.add_fieldsets + ((None, {"fields": ("first_name",
                                                                   "last_name",
+                                                                  "username",
                                                                   "email",
                                                                   "reg_num",
                                                                   "supervisor",
                                                                   "team",
-                                                                  "role",
+                                                                  "ROLE_CHOICES",
                                                                   )}),)
 
 
