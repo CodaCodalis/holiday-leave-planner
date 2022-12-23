@@ -52,6 +52,7 @@ class Team(models.Model):
         (0.75, "75%"),
         (1.0, "100%"),
     ]
+
     division = models.ForeignKey(
         "Division",
         on_delete=models.CASCADE,
