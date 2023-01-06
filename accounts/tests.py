@@ -2,7 +2,6 @@ from django.contrib.auth import get_user_model
 from django.test import TestCase
 from .models import Department, Division, Team, Employee
 from django.urls import reverse
-from unittest import skip
 
 
 class SignupTests(TestCase):
@@ -15,7 +14,6 @@ class SignupTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, "registration/signup.html")
 
-    @skip("FK attributes testable?")
     def test_signup_form(self):
         Employee.objects.create(username="hodep", email="a@bc.de", first_name="B", last_name="Oss", reg_num="111100", role="HODep")
         Department.objects.create(name="dep_1", head_id=1)
@@ -27,23 +25,24 @@ class SignupTests(TestCase):
             {
                 "username": "testuser",
                 "email": "testuser@email.com",
-                "password1": "testpass123",
-                "password2": "testpass123",
                 "first_name": "Arb",
                 "last_name": "Eitstier",
                 "reg_num": "111111",
-                "supervisor": "hodep",  # TODO: Test for supervisor attribute
-                "team": "team_1",  # TODO: Test for team attribute
-                "role": "Emp",  # TODO: Test for role attribute
+                "supervisor": "1",
+                "team": "1",
+                "role": "Emp",
+                "password1": "testpass123",
+                "password2": "testpass123",
             },
         )
         self.assertEqual(response.status_code, 302)
         self.assertEqual(get_user_model().objects.all().count(), 2)
-        self.assertEqual(get_user_model().objects.all()[0].username, "testuser")
-        self.assertEqual(get_user_model().objects.all()[0].email, "testuser@email.com")
-        self.assertEqual(get_user_model().objects.all()[0].first_name, "Arb")
-        self.assertEqual(get_user_model().objects.all()[0].last_name, "Eitstier")
-        self.assertEqual(get_user_model().objects.all()[0].reg_num, 111111)
-        self.assertEqual(get_user_model().objects.all()[0].supervisor, "hodep")
-        self.assertEqual(get_user_model().objects.all()[0].team, "team_1")
-        self.assertEqual(get_user_model().objects.all()[0].role, "employee")
+        self.assertEqual(get_user_model().objects.all()[0].username, "hodep")
+        self.assertEqual(get_user_model().objects.all()[1].username, "testuser")
+        self.assertEqual(get_user_model().objects.all()[1].email, "testuser@email.com")
+        self.assertEqual(get_user_model().objects.all()[1].first_name, "Arb")
+        self.assertEqual(get_user_model().objects.all()[1].last_name, "Eitstier")
+        self.assertEqual(get_user_model().objects.all()[1].reg_num, 111111)
+        self.assertEqual(get_user_model().objects.all()[1].supervisor.first_name, "B")
+        self.assertEqual(get_user_model().objects.all()[1].team.name, "team_1")
+        self.assertEqual(get_user_model().objects.all()[1].role, "Emp")
