@@ -1,0 +1,15 @@
+.calendar tr, .calendar td {
+    border: 1px solid black;
+}
+
+.calendar th {
+    padding: 10px;
+    text-align: center;
+    font-size: 18px;
+}
+
+.calendar td {
+    width: 200px;
+    height: 100px;
+    padding: 20px 0px 0px 5px;
+}

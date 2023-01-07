@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% block title %}
+    HOPLA - Kalender
+{% endblock %}
+{% block content %}
+    <h2 class="content">Kalender</h2>
+    <div>
+        <a href="{% url 'calendar' %}?{{ prev_month }}"> vorheriger Monat </a> |
+        <a href="{% url 'calendar' %}?{{ next_month }}"> nächster Monat </a>
+    </div>
+    {{ calendar }}
+{% endblock %}
