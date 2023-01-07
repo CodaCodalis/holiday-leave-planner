@@ -1,7 +1,6 @@
 from datetime import date
 from calendar import HTMLCalendar
 from .models import Vacation
-from accounts.models import CustomUser
 from django.contrib.auth import get_user_model
 
 
@@ -11,47 +10,51 @@ class Calendar(HTMLCalendar):
         self.month = month
         super(Calendar, self).__init__()
 
-    def formatday(self, day, vacations, user, teammember_count):
+    def formatday(self, day, vacations, user):
         d = ''
-        color = f'style="background-color:#cccccc;"'
-        dot_color = '#43C532'
-        min_att = 0.5
+
         if day != 0:
             processed_date = date(self.year, self.month, day)
-            vacationers = 0
+            vacationers_in_team = 0
             for vacation in vacations:
                 if vacation.is_on_date(processed_date) and user.team == vacation.user.team:
                     d += f'<li> {vacation.get_html_url} </li>'
-                    vacationers += 1
-            if vacationers > 0 and vacationers/teammember_count >= min_att:
-                dot_color = '#F6D200'
-            if vacationers > 0 and vacationers / teammember_count < min_att:
-                dot_color = '#D10A11'
+                    vacationers_in_team += 1
+            dot = self.get_dot(user, vacationers_in_team)
+            return f"<td><span>{day} {dot}</span><ul style='list-style-type:none'> {d} </ul></td>"
+        return f'<td></td>'
 
-            return f"<td {color}><span>{day}</span><font color='{dot_color}'> &#11044; </font><ul style='list-style-type:none'> {d} </ul></td>"
-        return f'<td {color}></td>'
-
-    def formatweek(self, theweek, vacations, user, teammember_count):
+    def formatweek(self, theweek, vacations, user):
         week = ''
         for d, weekday in theweek:
-            week += self.formatday(d, vacations, user, teammember_count)
+            week += self.formatday(d, vacations, user)
         return f'<tr> {week} </tr>'
 
     def formatmonth(self, user, withyear=True):
         vacations = Vacation.objects.all()
-        teammember_count = self.count_teammembers(user)
         cal = f'<table border="0" cellpadding="0" cellspacing="0" class="calendar">\n'
         cal += f'{self.formatmonthname(self.year, self.month, withyear=withyear)}\n'
         cal += f'{self.formatweekheader()}\n'
         for week in self.monthdays2calendar(self.year, self.month):
-            cal += f'{self.formatweek(week, vacations, user, teammember_count)}\n'
+            cal += f'{self.formatweek(week, vacations, user)}\n'
         return cal
 
     def count_teammembers(self, logged_in_user):
         User = get_user_model()
         users = User.objects.all()
-        counter = 0
+        teammembers = 0
         for user in users:
             if user.team == logged_in_user.team:
-                counter += 1
-        return counter
+                teammembers += 1
+        return teammembers
+
+    def get_dot(self, user, vacationers):
+        min_att = float(user.team.min_attendance) / 100.0
+        # min_att = 0.33
+        teammembers = self.count_teammembers(user)
+        dot_color = '#43C532'  # green
+        if vacationers > 0 and 1 - (vacationers / teammembers) >= min_att:
+            dot_color = '#F6D200'  # yellow
+        if vacationers > 0 and 1 - (vacationers / teammembers) < min_att:
+            dot_color = '#D10A11'  # red
+        return f'<font color="{dot_color}"> &#11044; </font>'

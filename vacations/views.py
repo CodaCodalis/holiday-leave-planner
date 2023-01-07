@@ -1,17 +1,11 @@
-
-
 from datetime import date, timedelta
-from django.shortcuts import render, get_object_or_404
-from django.http import HttpResponseRedirect
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, DeleteView, CreateView, UpdateView
 from django.utils.safestring import mark_safe
 import calendar
 
-from accounts.models import CustomUser
 from .utils import Calendar
 from .models import *
-from .forms import VacationForm
 
 
 class CalendarView(ListView):
@@ -50,6 +44,7 @@ class CalendarView(ListView):
         month = 'month=' + str(next_month.year) + '-' + str(next_month.month)
         return month
 
+
 class VacationCreateView(CreateView):
     model = Vacation
     template_name = "vacation_new.html"
@@ -81,17 +76,3 @@ class VacationUpdateView(UpdateView):
         "end_date",
     )
     template_name = "vacation_edit.html"
-
-
-def vacation(request, vacation_id=None):
-    instance = Vacation()
-    if vacation_id:
-        instance = get_object_or_404(Vacation, pk=vacation_id)
-    else:
-        instance = Vacation()
-
-    form = VacationForm(request.POST or None, instance=instance)
-    if request.POST and form.is_valid():
-        form.save()
-        return HttpResponseRedirect(reverse('calendar'))
-    return render(request, 'vacation.html', {'form': form})
