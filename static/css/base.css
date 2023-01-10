@@ -13,3 +13,27 @@
     height: 100px;
     padding: 20px 0px 0px 5px;
 }
+
+.vacations {
+    width: 98%;
+    height: 98%;
+    margin: auto;
+    font-size: 13px;
+}
+
+.vacations tr, .vactations td {
+    border: 1px solid black;
+}
+
+.vacations th {
+    padding: 10px;
+    text-align: center;
+    font-size: 18px;
+}
+
+.vacations td {
+    text-align: center;
+    width: 200px;
+    height: 50px;
+    padding: 5px 0px 0px 2px;
+}

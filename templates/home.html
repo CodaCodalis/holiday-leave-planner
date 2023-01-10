@@ -5,7 +5,24 @@
 {% block content %}
 {% if user.is_authenticated %}
     Benutzer: {{ user.first_name }} {{ user.last_name }} <br>
-    Vorgesetzter: {{ user.supervisor.first_name }} {{ user.supervisor.last_name }}
+    Vorgesetzter: {{ user.supervisor.first_name }} {{ user.supervisor.last_name }} <br>
+    Team: {{ user.team }}
+    <table class="vacations">
+            <tr>
+                <th>Urlaubsbeginn</th>
+                <th>Urlaubsende</th>
+                <th>Aktion</th>
+            </tr>
+            {% for vacation in vacations %}
+                {% if vacation.user.id == user.id %}
+                <tr>
+                    <td>{{ vacation.start_date.isoformat }}</td>
+                    <td>{{ vacation.end_date.isoformat }}</td>
+                    <td><a href="/vacations/edit/{{ vacation.pk }}">löschen</a> | <a href="/vacations/delete/{{ vacation.pk }}">löschen</a></td>
+                </tr>
+                {% endif %}
+            {% endfor %}
+        </table>
   <p><a href="{% url 'logout' %}">Log Out</a></p>
 {% else %}
   <p>Sie sind nicht eingeloggt.</p>
