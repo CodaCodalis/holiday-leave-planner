@@ -6,8 +6,33 @@
 {% if user.is_authenticated %}
     Benutzer: {{ user.first_name }} {{ user.last_name }} <br>
     Vorgesetzter: {{ user.supervisor.first_name }} {{ user.supervisor.last_name }} <br>
-    Team: {{ user.team }}
-    <table class="vacations">
+    Team: {{ user.team }} <br>
+    Rolle: {{ user.role }} <br>
+    <br>
+    {% if user.role == "HODiv" %}
+        Teams bearbeiten:
+        <table class="infolist">
+            <tr>
+                <th>Team</th>
+                <th>Min attendance</th>
+                <th>Head of team</th>
+                <th>Aktion</th>
+            </tr>
+        {% for team in teams %}
+            {% if user.team.division == team.division %}
+            <tr>
+                <td>{{ team.name }}</td>
+                <td>{{ team.min_attendance }} %</td>
+                <td>{{ team.head }}</td>
+                <td><a href="{% url 'team_change' team.id %}">bearbeiten</a></td>
+            </tr>
+            {% endif %}
+        {% endfor %}
+        </table>
+        <br>
+    {% endif %}
+    Urlaubsübersicht:
+    <table class="infolist">
             <tr>
                 <th>Urlaubsbeginn</th>
                 <th>Urlaubsende</th>
