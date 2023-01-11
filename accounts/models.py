@@ -81,8 +81,8 @@ class Employee(AbstractUser):
     team = models.ForeignKey(
         "Team",
         on_delete=models.CASCADE,
-        null=True,
-        blank=True,
+        null=False,
+        blank=False,
     )
 
     class Role(models.TextChoices):

@@ -31,3 +31,25 @@ class EmployeeChangeForm(UserChangeForm):
             "team",
             "role",
         )
+
+
+class TeamCreationForm(UserCreationForm):
+    class Meta(UserCreationForm):
+        model = Team
+        fields = (
+            "name",
+            "head",
+            "min_attendance",
+            "division",
+        )
+
+
+class TeamChangeForm(UserChangeForm):
+    class Meta:
+        model = Team
+        fields = (
+            "name",
+            "head",
+            "min_attendance",
+            "division",
+        )

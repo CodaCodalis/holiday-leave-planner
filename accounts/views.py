@@ -1,8 +1,8 @@
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, UpdateView, TemplateView
-from .models import Employee
+from .models import Employee, Team
 
-from .forms import EmployeeCreationForm, EmployeeChangeForm
+from .forms import EmployeeCreationForm, EmployeeChangeForm, TeamChangeForm
 
 
 class SignUpView(CreateView):
@@ -20,3 +20,14 @@ class UserInfoChangeView(UpdateView):
 
 class UserInfoChangeDoneView(TemplateView):
     template_name = "registration/user_info_change_done.html"
+
+
+class TeamChangeView(UpdateView):
+    model = Team
+    form_class = TeamChangeForm
+    success_url = reverse_lazy('team_change_done')
+    template_name = "registration/team_change_form.html"
+
+
+class TeamChangeDoneView(TemplateView):
+    template_name = "registration/team_change_done.html"

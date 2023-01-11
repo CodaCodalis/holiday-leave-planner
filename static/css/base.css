@@ -14,24 +14,24 @@
     padding: 20px 0px 0px 5px;
 }
 
-.vacations {
+.infolist {
     width: 98%;
     height: 98%;
     margin: auto;
     font-size: 13px;
 }
 
-.vacations tr, .vactations td {
+.infolist tr, .infolist td {
     border: 1px solid black;
 }
 
-.vacations th {
+.infolist th {
     padding: 10px;
     text-align: center;
     font-size: 18px;
 }
 
-.vacations td {
+.infolist td {
     text-align: center;
     width: 200px;
     height: 50px;
