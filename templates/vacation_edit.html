@@ -1,9 +1,10 @@
 {% extends "base.html" %}
+{% load crispy_forms_tags %}
 
 {% block content %}
 <h1>Urlaubseintrag ändern</h1>
 <form action="" method="post">{% csrf_token %}
-  {{ form.as_p }}
+  {{ form|crispy }}
   <button type="submit">Bestätigen</button>
 </form>
 {% endblock content %}
