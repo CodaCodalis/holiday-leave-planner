@@ -26,7 +26,7 @@
           <ul class="dropdown-menu text-small" aria-labelledby="dropdownUser1">
             <li><a class="dropdown-item" href="{% url 'calendar'%}">Kalender</a></li>
             <li><a class="dropdown-item" href="{% url 'vacation_new'%}">Urlaub beantragen</a></li>
-            <li><a class="dropdown-item" href="{% url 'user_info' user.id %}">Account bearbeiten</a></li>
+            <li><a class="dropdown-item" href="{% url 'user_info_change' user.id %}">Account bearbeiten</a></li>
             <li><a class="dropdown-item" href="{% url 'password_change'%}">Passwort ändern</a></li>
             <li><a class="dropdown-item" href="{% url 'logout' %}">Log Out</a></li>
           </ul>
