@@ -1,4 +1,5 @@
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
+from django import forms
 
 from .models import Employee, Team
 
@@ -18,7 +19,7 @@ class EmployeeCreationForm(UserCreationForm):
         )
 
 
-class EmployeeChangeForm(UserChangeForm):
+class EmployeeChangeForm(forms.ModelForm):
     class Meta:
         model = Employee
         fields = (
@@ -29,12 +30,11 @@ class EmployeeChangeForm(UserChangeForm):
             "reg_num",
             "supervisor",
             "team",
-            "role",
         )
 
 
-class TeamCreationForm(UserCreationForm):
-    class Meta(UserCreationForm):
+class TeamCreationForm(forms.ModelForm):
+    class Meta(forms.ModelForm):
         model = Team
         fields = (
             "name",
@@ -44,7 +44,7 @@ class TeamCreationForm(UserCreationForm):
         )
 
 
-class TeamChangeForm(UserChangeForm):
+class TeamChangeForm(forms.ModelForm):
     class Meta:
         model = Team
         fields = (
