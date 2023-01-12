@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Löschen</h1>
+<form action="" method="post">{% csrf_token %}
+  <p>Möchten Sie den Urlaub vom {{ vacation.start_date }} bis zum {{ vacation.end_date }} wirklich löschen?</p>
+  <button type="submit">Bestätigen</button>
+</form>
+{% endblock content %}
