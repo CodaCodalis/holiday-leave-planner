@@ -4,27 +4,9 @@
 
 {% block content %}
 {% if user.is_authenticated %}
-    <h3>Urlaubsübersicht</h3>
     <p>
         Hallo {{ user.first_name }} {{ user.last_name }}, willkommen auf der Homepage des Urlaubsvertretungsplaners HOPLA!
     </p>
-    <table class="infolist">
-        <tr>
-            <th>Urlaubsbeginn</th>
-            <th>Urlaubsende</th>
-            <th>Aktion</th>
-        </tr>
-        {% for vacation in vacations %}
-            {% if vacation.user.id == user.id %}
-            <tr>
-                <td>{{ vacation.start_date.isoformat }}</td>
-                <td>{{ vacation.end_date.isoformat }}</td>
-                <td><a href="/vacations/edit/{{ vacation.pk }}">bearbeiten</a> |
-                    <a href="/vacations/delete/{{ vacation.pk }}">löschen</a></td>
-            </tr>
-            {% endif %}
-        {% endfor %}
-    </table>
 {% else %}
   <p>Sie sind nicht eingeloggt.</p>
   <a href="{% url 'login' %}">Log In</a> |

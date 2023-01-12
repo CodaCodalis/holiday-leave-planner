@@ -1,9 +1,30 @@
 {% extends "base.html" %}
 
+{% block title %}HOPLA - Urlaubsübersicht{% endblock title %}
+
 {% block content %}
-<h1>Löschen</h1>
-<form action="" method="post">{% csrf_token %}
-  <p>Möchten Sie den Urlaub vom {{ vacation.start_date }} bis zum {{ vacation.end_date }} wirklich löschen?</p>
-  <button type="submit">Bestätigen</button>
-</form>
+{% if user.is_authenticated %}
+    <h3>Urlaubsübersicht</h3>
+    <table class="infolist">
+        <tr>
+            <th>Urlaubsbeginn</th>
+            <th>Urlaubsende</th>
+            <th>Aktion</th>
+        </tr>
+        {% for vacation in vacations %}
+            {% if vacation.user.id == user.id %}
+            <tr>
+                <td>{{ vacation.start_date.isoformat }}</td>
+                <td>{{ vacation.end_date.isoformat }}</td>
+                <td><a href="/vacations/edit/{{ vacation.pk }}">bearbeiten</a> |
+                    <a href="/vacations/delete/{{ vacation.pk }}">löschen</a></td>
+            </tr>
+            {% endif %}
+        {% endfor %}
+    </table>
+{% else %}
+  <p>Sie sind nicht eingeloggt.</p>
+  <a href="{% url 'login' %}">Log In</a> |
+  <a href="{% url 'signup' %}">Sign Up</a>
+{% endif %}
 {% endblock content %}

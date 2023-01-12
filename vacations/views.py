@@ -1,6 +1,6 @@
 from datetime import date, timedelta
 from django.urls import reverse_lazy
-from django.views.generic import ListView, DetailView, DeleteView, CreateView, UpdateView
+from django.views.generic import ListView, DetailView, DeleteView, CreateView, UpdateView, TemplateView
 from django.utils.safestring import mark_safe
 import calendar
 
@@ -76,3 +76,13 @@ class VacationUpdateView(UpdateView):
         "end_date",
     )
     template_name = "vacation_edit.html"
+
+
+class VacationsOverviewView(TemplateView):
+
+    template_name = "vacations_overview.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['vacations'] = Vacation.objects.all()
+        return context
