@@ -31,3 +31,12 @@ class TeamChangeView(UpdateView):
 
 class TeamChangeDoneView(TemplateView):
     template_name = "registration/team_change_done.html"
+
+
+class TeamsEditView(TemplateView):
+    template_name = "registration/teams_edit.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['teams'] = Team.objects.all()
+        return context

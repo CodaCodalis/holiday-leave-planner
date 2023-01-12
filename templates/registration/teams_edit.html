@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block title %}HOPLA - Home{% endblock title %}
+
+{% block content %}
+{% if user.is_authenticated %}
+    {% if user.role == "HODiv" %}
+        <h1>Teams bearbeiten</h1>
+        <table class="infolist">
+            <tr>
+                <th>Team</th>
+                <th>Min attendance</th>
+                <th>Head of team</th>
+                <th>Aktion</th>
+            </tr>
+        {% for team in teams %}
+            {% if user.team.division == team.division %}
+            <tr>
+                <td>{{ team.name }}</td>
+                <td>{{ team.min_attendance }} %</td>
+                <td>{{ team.head }}</td>
+                <td><a href="{% url 'team_change' team.id %}">bearbeiten</a></td>
+            </tr>
+            {% endif %}
+        {% endfor %}
+        </table>
+        <br>
+    {% endif %}
+{% endif %}
+{% endblock content %}
