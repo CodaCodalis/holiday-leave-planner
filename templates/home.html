@@ -8,12 +8,12 @@
         Hallo {{ user.first_name }} {{ user.last_name }}, willkommen auf der Homepage des Urlaubsvertretungsplaners HOPLA! <br>
     </p>
     <p>
-        {% if teams_with_conflict|length == 0 %}
+        {% if dates_with_conflict|length == 0 %}
             Es bestehen keine Konflikte bei der Urlaubsplanung.
         {% else %}
-            Konflikte gefunden in:<br>
-            {% for team_with_conflict in teams_with_conflict %}
-                {{ team_with_conflict.name }} <br>
+            Konflikte gefunden:<br>
+            {% for date_with_conflict in dates_with_conflict %}
+                {{ date_with_conflict.isoformat }} <br>
             {% endfor %}
         {% endif %}
     </p>
