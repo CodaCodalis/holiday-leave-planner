@@ -1,4 +1,5 @@
 from datetime import date, timedelta
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, DeleteView, CreateView, UpdateView, TemplateView
 from django.utils.safestring import mark_safe
@@ -8,7 +9,7 @@ from .utils import Calendar
 from .models import *
 
 
-class CalendarView(ListView):
+class CalendarView(LoginRequiredMixin, ListView):
     model = Vacation
     template_name = 'calendar.html'
 
@@ -45,7 +46,7 @@ class CalendarView(ListView):
         return month
 
 
-class VacationCreateView(CreateView):
+class VacationCreateView(LoginRequiredMixin, CreateView):
     model = Vacation
     template_name = "vacation_new.html"
     fields = (
@@ -58,18 +59,22 @@ class VacationCreateView(CreateView):
         return super().form_valid(form)
 
 
-class VacationDetailView(DetailView):
+class VacationDetailView(LoginRequiredMixin, DetailView):
     model = Vacation
     template_name = "vacation_detail.html"
 
 
-class VacationDeleteView(DeleteView):
+class VacationDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = Vacation
     template_name = "vacation_delete.html"
     success_url = reverse_lazy("calendar")
 
+    def test_func(self):
+        obj = self.get_object()
+        return obj.user == self.request.user
 
-class VacationUpdateView(UpdateView):
+
+class VacationUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Vacation
     fields = (
         "start_date",
@@ -77,9 +82,12 @@ class VacationUpdateView(UpdateView):
     )
     template_name = "vacation_edit.html"
 
+    def test_func(self):
+        obj = self.get_object()
+        return obj.user == self.request.user
 
-class VacationsOverviewView(TemplateView):
 
+class VacationsOverviewView(LoginRequiredMixin, TemplateView):
     template_name = "vacations_overview.html"
 
     def get_context_data(self, **kwargs):

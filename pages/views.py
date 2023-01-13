@@ -1,12 +1,12 @@
 import datetime
-
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import TemplateView
 from vacations.models import Vacation
 from accounts.models import Team
 from django.contrib.auth import get_user_model
 
 
-class HomePageView(TemplateView):
+class HomePageView(LoginRequiredMixin, TemplateView):
     template_name = "home.html"
     vacations = Vacation.objects.all()
     teams = Team.objects.all()

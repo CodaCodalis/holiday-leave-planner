@@ -51,5 +51,4 @@ class TeamChangeForm(forms.ModelForm):
             "name",
             "head",
             "min_attendance",
-            "division",
         )
