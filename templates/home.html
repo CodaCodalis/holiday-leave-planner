@@ -5,7 +5,17 @@
 {% block content %}
 {% if user.is_authenticated %}
     <p>
-        Hallo {{ user.first_name }} {{ user.last_name }}, willkommen auf der Homepage des Urlaubsvertretungsplaners HOPLA!
+        Hallo {{ user.first_name }} {{ user.last_name }}, willkommen auf der Homepage des Urlaubsvertretungsplaners HOPLA! <br>
+    </p>
+    <p>
+        {% if dates_with_conflict|length == 0 %}
+            Es bestehen keine Konflikte bei der Urlaubsplanung.
+        {% else %}
+            Konflikte gefunden:<br>
+            {% for date_with_conflict in dates_with_conflict %}
+                {{ date_with_conflict.isoformat }} <br>
+            {% endfor %}
+        {% endif %}
     </p>
 {% else %}
   <p>Sie sind nicht eingeloggt.</p>
