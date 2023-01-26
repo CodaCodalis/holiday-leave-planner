@@ -8,13 +8,20 @@
         Hallo {{ user.first_name }} {{ user.last_name }}, willkommen auf der Homepage des Urlaubsvertretungsplaners HOPLA! <br>
     </p>
     <p>
-        {% if dates_with_conflict|length == 0 %}
+        {% if conflicts|length == 0 %}
             Es bestehen keine Konflikte bei der Urlaubsplanung.
         {% else %}
             Konflikte gefunden:<br>
-            {% for date_with_conflict in dates_with_conflict %}
-                {{ date_with_conflict.isoformat }} <br>
+            {% for date, team_att in conflicts.items %}
+                Am <b>{{ date|date:"d.m.Y" }}</b> ist die Anwesenheit in
+                {% for team, att in team_att.items %}
+                    <b>{{ team }}</b> lediglich
+                    {% for act, min in att.items %}
+                        <b>{{ act }}%</b>, aber <b>{{ min }}%</b> sind gefordert.
+                    {% endfor %}
+                {% endfor %}
             {% endfor %}
+
         {% endif %}
     </p>
 {% else %}
