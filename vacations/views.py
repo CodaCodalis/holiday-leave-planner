@@ -48,6 +48,10 @@ class CalendarView(LoginRequiredMixin, ListView):
 
 class VacationCreateView(LoginRequiredMixin, CreateView):
     model = Vacation
+    fields = (
+        "start_date",
+        "end_date",
+    )
     template_name = "vacation_new.html"
 
     def form_valid(self, form):
