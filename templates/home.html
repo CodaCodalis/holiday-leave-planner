@@ -11,13 +11,15 @@
         {% if conflicts|length == 0 %}
             Es bestehen keine Konflikte bei der Urlaubsplanung.
         {% else %}
-            Konflikte gefunden:<br>
-            {% for date, team_att in conflicts.items %}
-                Am <b>{{ date|date:"d.m.Y" }}</b> ist die Anwesenheit in
-                {% for team, att in team_att.items %}
-                    <b>{{ team }}</b> lediglich
-                    {% for act, min in att.items %}
-                        <b>{{ act }}%</b>, aber <b>{{ min }}%</b> sind gefordert.
+            {{ conflicts|length }} Konflikt(e) gefunden:<br><br>
+            {% for conflict in conflicts %}
+                {% for number, date_team in conflict.items %}
+                    {% for date, team_att in date_team.items %}
+                        {% for team, att in team_att.items %}
+                            {% for act, min in att.items %}
+                                {{ number }}: Am <b>{{ date|date:"d.m.Y" }}</b> ist die Anwesenheit in <b>{{ team }}</b> lediglich <b>{{ act }}%</b>, aber <b>{{ min }}%</b> sind gefordert. <br>
+                            {% endfor %}
+                        {% endfor %}
                     {% endfor %}
                 {% endfor %}
             {% endfor %}
