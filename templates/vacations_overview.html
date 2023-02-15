@@ -14,8 +14,8 @@
         {% for vacation in vacations %}
             {% if vacation.user.id == user.id %}
             <tr>
-                <td>{{ vacation.start_date.isoformat }}</td>
-                <td>{{ vacation.end_date.isoformat }}</td>
+                <td>{{ vacation.start_date|date:"d.m.Y" }}</td>
+                <td>{{ vacation.end_date|date:"d.m.Y" }}</td>
                 <td><a href="/vacations/edit/{{ vacation.pk }}">bearbeiten</a> |
                     <a href="/vacations/delete/{{ vacation.pk }}">löschen</a></td>
             </tr>
