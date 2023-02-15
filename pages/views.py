@@ -4,14 +4,17 @@ from django.views.generic import TemplateView
 from vacations.models import Vacation
 from accounts.models import Team
 from django.contrib.auth import get_user_model
+from json import dumps
 
 
 class HomePageView(LoginRequiredMixin, TemplateView):
     template_name = "home.html"
+    conflicts = ""
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['conflicts'] = self.find_conflicts()
+        context['conflicts_str'] = self.conflicts
         return context
 
     @classmethod
@@ -22,6 +25,8 @@ class HomePageView(LoginRequiredMixin, TemplateView):
 
         conflict_dates = list()
         conflicts = list()
+        conflicts_dict = {}
+        conflict_dict = {}
         counter = 0
         for team in teams:
             teammembers = 0
@@ -53,10 +58,22 @@ class HomePageView(LoginRequiredMixin, TemplateView):
                             conflict_dates.append(processed_date)
                             # conflicts_info[str(processed_date)] = str(user.team)
                             # infos = [processed_date, str(user.team), int(actual_att*100), int(min_att*100)]
-                            att = {int(actual_att*100): int(min_att*100)}
+                            att = {int(actual_att * 100): int(min_att * 100)}
                             team_att = {str(user.team): att}
                             date_team = {processed_date: team_att}
                             counter += 1
                             conflict = {str(counter): date_team}
                             conflicts.append(conflict)
-        return conflicts
+                            conflict_dict.update({"date": str(processed_date),
+                                                  "team": str(user.team),
+                                                  "att": actual_att * 100,
+                                                  "min_att": min_att * 100})
+                            conflicts_dict.update({str(counter): conflict_dict})
+        cls.conflicts = conflicts
+        return dumps(conflicts_dict)
+
+    def set_conflicts(self, conflicts):
+        self.conflicts = conflicts
+
+    def get_conflicts(cls):
+        return cls.conflicts
