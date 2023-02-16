@@ -2,73 +2,40 @@ var conflicts = JSON.parse(conflictsStr);
 var conflictsCount = Object.keys(conflicts).length;
 
 document.getElementById("count").innerText = conflictsCount;
-
 var conflictsNode = document.getElementById('conflicts');
+var conflictNode = document.getElementById('conflict0');
 
-for(var n in conflicts) {
-    var conflictNode = document.getElementById('conflict'+[n]);
+for (var i = 0; i < conflictsCount; i++) {
+    var conflictNodeAdd = conflictNode.cloneNode(true);
+    conflictNodeAdd.setAttribute("id", "conflict" + [i]);
 
-    var conflictSpanNum = document.getElementById("num"+[n]);
-    var conflictSpanDate = document.getElementById("date"+[n]);
-    var conflictSpanTeam = document.getElementById("team"+[n]);
-    var conflictSpanAtt = document.getElementById("att"+[n]);
-    var conflictSpanMinAtt = document.getElementById("min_att"+[n]);
+    var conflictSpanNum = document.getElementById("num" + [i]);
+    var conflictSpanDate = document.getElementById("date" + [i]);
+    var conflictSpanTeam = document.getElementById("team" + [i]);
+    var conflictSpanAtt = document.getElementById("att" + [i]);
+    var conflictSpanMinAtt = document.getElementById("min_att" + [i]);
 
-    var unixEpoch = Date.parse(conflicts[n].date);
+    var unixEpoch = Date.parse(conflicts[i].date);
     var date = new Date(unixEpoch);
     var formattedDate = date.toLocaleDateString();
 
-    var numNode = document.createTextNode([n]);
-    var dateNode = document.createTextNode(formattedDate);
-    var teamNode = document.createTextNode(conflicts[n].team);
-    var attNode = document.createTextNode(conflicts[n].att);
-    var minAttNode = document.createTextNode(conflicts[n].min_att);
+    console.log(conflicts);
+    console.log(conflicts[i]);
+    conflictSpanNum.innerText = i+1;
+    console.log(conflictSpanNum);
+    conflictSpanDate.innerText = formattedDate;
+    console.log(conflictSpanDate);
+    conflictSpanTeam.innerText = conflicts[i].team;
+    conflictSpanAtt.innerText = conflicts[i].att;
+    conflictSpanMinAtt.innerText = conflicts[i].min_att;
 
-    conflictSpanNum.appendChild(numNode);
-    conflictSpanDate.appendChild(dateNode);
-    conflictSpanTeam.appendChild(teamNode);
-    conflictSpanAtt.appendChild(attNode);
-    conflictSpanMinAtt.appendChild(minAttNode);
+    conflictsNode.appendChild(conflictNodeAdd);
 
-    if (n > 1) {
-        conflictNode.appendChild(conflictSpanNum);
-        conflictNode.appendChild(conflictSpanDate);
-        conflictNode.appendChild(conflictSpanTeam);
-        conflictNode.appendChild(conflictSpanAtt);
-        conflictNode.appendChild(conflictSpanMinAtt);
-        conflictsNode.appendChild(conflictNode);
-    }
-    if (n < conflictsCount) {
-        conflictNode = conflictNode.cloneNode(true);
-
-        var conflictSpanNumAdd = conflictSpanNum;
-        var conflictSpanDateAdd = conflictSpanDate;
-        var conflictSpanTeamAdd = conflictSpanTeam;
-        var conflictSpanAttAdd = conflictSpanAtt;
-        var conflictSpanMinAttAdd = conflictSpanMinAtt;
-
-        n++;
-        conflictSpanNumAdd.setAttribute("id", "num" + [n]);
-        conflictSpanDateAdd.setAttribute("id", "num" + [n]);
-        conflictSpanTeamAdd.setAttribute("id", "num" + [n]);
-        conflictSpanAttAdd.setAttribute("id", "num" + [n]);
-        conflictSpanMinAttAdd.setAttribute("id", "num" + [n]);
-
-        conflictSpanNum = conflictSpanNumAdd;
-        conflictSpanDate = conflictSpanDateAdd;
-        conflictSpanTeam = conflictSpanTeamAdd;
-        conflictSpanAtt = conflictSpanMinAttAdd;
-        conflictSpanMinAtt = conflictSpanMinAttAdd;
-    }
+    conflictSpanNum.setAttribute("id", "num" + [i+1])
+    conflictSpanDate.setAttribute("id", "date" + [i+1])
+    conflictSpanTeam.setAttribute("id", "team" + [i+1])
+    conflictSpanAtt.setAttribute("id", "att" + [i+1])
+    conflictSpanMinAtt.setAttribute("id", "min_att" + [i+1])
 }
-//conflictsNode.appendChild(conflictSpanNum);
+conflictNode.remove();
 
-/*
-for(var num in conflicts){
-    conflictNode.innerHTML += num + ' : Am '
-        + conflicts[num].date + ' ist die Anwesenheit in '
-        + conflicts[num].team + ' lediglich '
-        + conflicts[num].att + '%, aber '
-        + conflicts[num].min_att + '% sind gefordert. <br><br>';
-}
-*/

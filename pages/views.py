@@ -25,8 +25,7 @@ class HomePageView(LoginRequiredMixin, TemplateView):
 
         conflict_dates = list()
         conflicts = list()
-        conflicts_dict = {}
-        conflict_dict = {}
+        conflict_dates_list = list()
         counter = 0
         for team in teams:
             teammembers = 0
@@ -64,13 +63,13 @@ class HomePageView(LoginRequiredMixin, TemplateView):
                             counter += 1
                             conflict = {str(counter): date_team}
                             conflicts.append(conflict)
-                            conflict_dict.update({"date": str(processed_date),
+                            conflicts_list = {"date": str(processed_date),
                                                   "team": str(user.team),
                                                   "att": actual_att * 100,
-                                                  "min_att": min_att * 100})
-                            conflicts_dict.update({str(counter): conflict_dict})
+                                                  "min_att": min_att * 100}
+                            conflict_dates_list.append(conflicts_list)
         cls.conflicts = conflicts
-        return dumps(conflicts_dict)
+        return dumps(conflict_dates_list)
 
     def set_conflicts(self, conflicts):
         self.conflicts = conflicts
