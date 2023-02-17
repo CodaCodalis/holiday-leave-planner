@@ -70,9 +70,3 @@ class HomePageView(LoginRequiredMixin, TemplateView):
                             conflict_dates_list.append(conflicts_list)
         cls.conflicts = conflicts
         return dumps(conflict_dates_list)
-
-    def set_conflicts(self, conflicts):
-        self.conflicts = conflicts
-
-    def get_conflicts(cls):
-        return cls.conflicts

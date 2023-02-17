@@ -29,12 +29,9 @@
             </p>
 
             <span id="conflicts">
-                <span id="conflict0">
-                    <span id="num0"></span>: Am
-                    <span id="date0"></span> ist in Team
-                    <span id="team0"></span> die Anwesenheit nur
-                    <span id="att0"></span> %, soll aber
-                    <span id="min_att0"></span> % sein.<br>
+                <span id="conflict0" class="conflict">
+                    Am <span id="date0"></span> ist in Team <span id="team0"></span> die Anwesenheit nur
+                    <span id="att0"></span> %, soll aber <span id="min_att0"></span> % sein.<br>
                 </span>
             </span>
         {% endif %}
@@ -51,6 +48,8 @@
 {% block extrascripts %}
     <script>
         var conflictsStr = "{{ conflicts|escapejs }}";
+
     </script>
     <script src="{% static 'js/pages_homepage.js' %}"></script>
+    <script src="{% static 'js/jquery-3.6.3.min.js' %}"></script>
 {% endblock extrascripts %}
