@@ -5,7 +5,7 @@ from .models import Employee, Team
 from .forms import EmployeeCreationForm, EmployeeChangeForm, TeamChangeForm
 
 
-class SignUpView(LoginRequiredMixin, CreateView):
+class SignUpView(CreateView):
     form_class = EmployeeCreationForm
     success_url = reverse_lazy('login')
     template_name = "registration/signup.html"
