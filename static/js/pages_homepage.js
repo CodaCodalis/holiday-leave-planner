@@ -47,6 +47,7 @@ for (var i = 0; i < conflictsCount; i++) {
 document.getElementById("conflict0").remove();
 
 $('.conflict').hide();
+
 for (var i = 1; i <= conflictsCount; i++) {
     let id = "btn_show" + i;
     let button = document.createElement("button");
@@ -63,9 +64,11 @@ for (var i = 1; i <= conflictsCount; i++) {
     }
     let link = '/vacations/?month=' + year + '-' + month;
 
-    $('#conflict' + i).show('slow').append(button);
+    //setTimeout(function () {
+        $('#conflict' + i).append(button).show('slow');
+    //    }, i*500);
+
     $("#btn_show" + i).on('click',function(event){
         location.href = link;
     });
 }
-
