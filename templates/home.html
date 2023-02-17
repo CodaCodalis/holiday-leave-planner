@@ -12,27 +12,18 @@
         {% if conflicts_str|length == 0 %}
             Es bestehen keine Konflikte bei der Urlaubsplanung.
         {% else %}
-            <h2>{{ conflicts_str|length }} Konflikt(e) gefunden (Template-Version):</h2><br><br>
-            {% for conflict in conflicts_str %}
-                {% for number, date_team in conflict.items %}
-                    {% for date, team_att in date_team.items %}
-                        {% for team, att in team_att.items %}
-                            {% for act, min in att.items %}
-                                <h4>{{ number }}: Am <b>{{ date|date:"d.m.Y" }}</b> ist die Anwesenheit in <b>{{ team }}</b> lediglich <b>{{ act }}%</b>, aber <b>{{ min }}%</b> sind gefordert.</h4><br>
-                            {% endfor %}
-                        {% endfor %}
-                    {% endfor %}
-                {% endfor %}
-            {% endfor %}
             <p>
-                <h2><span id="count"></span> Konflikte gefunden (JS-Version): </h2>
+                <h2><span id="count"></span> Konflikte gefunden: </h2>
             </p>
 
             <span id="conflicts">
-                <span id="conflict0" class="conflict">
-                    Am <span id="date0"></span> ist in Team <span id="team0"></span> die Anwesenheit nur
-                    <span id="att0"></span> %, soll aber <span id="min_att0"></span> % sein.<br>
-                </span>
+               <div id="conflict0" class="conflict">
+                       Am
+                       <span id="date0" class="entry"></span> ist die Anwesenheit in
+                       <span id="team0" class="entry"></span> lediglich
+                       <span id="att0" class="entry"></span>%, soll aber
+                       <span id="min_att0" class="entry"></span>% sein.
+                </div>
             </span>
         {% endif %}
     </p>
@@ -47,7 +38,7 @@
 
 {% block extrascripts %}
     <script>
-        var conflictsStr = "{{ conflicts|escapejs }}";
+        var conflictsJSON = "{{ conflicts|escapejs }}";
 
     </script>
     <script src="{% static 'js/jquery-3.6.3.min.js' %}"></script>

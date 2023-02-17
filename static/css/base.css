@@ -38,6 +38,21 @@
     padding: 5px 0px 0px 2px;
 }
 
-    .conflict {
-        background-color:#ffc0c0;
-    }
+.conflict {
+    position: relative;
+    background-color:#ffc0c0;
+    height: 50px;
+    margin: 6px;
+    padding: 6px;
+    border-radius: 6px;
+}
+
+.entry {
+    font-weight: bold;
+}
+
+.btnmes {
+    position: absolute;
+    right: 10px;
+}
+
