@@ -46,6 +46,7 @@ for (var i = 0; i < conflictsCount; i++) {
 document.getElementById("conflict0").remove();
 
 $('.conflict').hide();
+
 for (var i = 1; i <= conflictsCount; i++) {
 
     let id = "btn_show" + i;
@@ -62,6 +63,7 @@ for (var i = 1; i <= conflictsCount; i++) {
         month = month.substring(1);
     }
     let link = '/vacations/?month=' + year + '-' + month;
+
 
     $("#conflict" + i).append(button);
 
