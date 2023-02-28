@@ -5,6 +5,6 @@
 <h1>Urlaub eintragen</h1>
 <form action="" method="post">{% csrf_token %}
   {{ form|crispy }}
-  <button type="submit">Anlegen</button>
+  <button type="submit" class="btn btn-outline-success right">Anlegen</button>
 </form>
 {% endblock content %}

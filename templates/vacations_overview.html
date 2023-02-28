@@ -5,7 +5,7 @@
 {% block content %}
 {% if user.is_authenticated %}
     <h3>Urlaubsübersicht</h3>
-    <table class="infolist">
+    <table class="infolist table table-striped">
         <tr>
             <th>Urlaubsbeginn</th>
             <th>Urlaubsende</th>
@@ -16,8 +16,8 @@
             <tr>
                 <td>{{ vacation.start_date|date:"d.m.Y" }}</td>
                 <td>{{ vacation.end_date|date:"d.m.Y" }}</td>
-                <td><a href="/vacations/edit/{{ vacation.pk }}">bearbeiten</a> |
-                    <a href="/vacations/delete/{{ vacation.pk }}">löschen</a></td>
+                <td><a class="btn btn-primary" href="/vacations/edit/{{ vacation.pk }}">bearbeiten</a>
+                    <a class="btn btn-danger" href="/vacations/delete/{{ vacation.pk }}">löschen</a></td>
             </tr>
             {% endif %}
         {% endfor %}

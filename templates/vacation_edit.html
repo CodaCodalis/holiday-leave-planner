@@ -5,6 +5,7 @@
 <h1>Urlaubseintrag ändern</h1>
 <form action="" method="post">{% csrf_token %}
   {{ form|crispy }}
-  <button type="submit">Bestätigen</button>
+  <button type="submit" class="btn btn-outline-success right">Bestätigen</button>
 </form>
+    <a href="{% url 'vacations_overview' %}" class="btn btn-outline-secondary left">zurück</a>
 {% endblock content %}
