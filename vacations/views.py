@@ -3,6 +3,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, DeleteView, CreateView, UpdateView, TemplateView
 from django.utils.safestring import mark_safe
+from vacations.forms import VacationNewForm, VacationEditForm
 import calendar
 
 from .utils import Calendar
@@ -48,10 +49,11 @@ class CalendarView(LoginRequiredMixin, ListView):
 
 class VacationCreateView(LoginRequiredMixin, CreateView):
     model = Vacation
-    fields = (
-        "start_date",
-        "end_date",
-    )
+    form_class = VacationNewForm
+    # fields = (
+    #     "start_date",
+    #     "end_date",
+    # )
     template_name = "vacation_new.html"
 
     def form_valid(self, form):
@@ -76,10 +78,11 @@ class VacationDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
 
 class VacationUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Vacation
-    fields = (
-        "start_date",
-        "end_date",
-    )
+    form_class = VacationEditForm
+    #fields = (
+    #     "start_date",
+    #     "end_date",
+    #)
     template_name = "vacation_edit.html"
 
     def test_func(self):
