@@ -107,3 +107,7 @@ td.conflict-free:hover {
 .clearfix {
   margin: 15px;
 }
+
+#overview-back {
+  margin: 10px 10px 10px 10px;
+}

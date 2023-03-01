@@ -1,7 +1,5 @@
 {% extends "base.html" %}
-
 {% block title %}HOPLA - Home{% endblock title %}
-
 {% block content %}
 {% if user.is_authenticated %}
     {% if user.role == "HODiv" %}
@@ -26,5 +24,6 @@
         </table>
         <br>
     {% endif %}
+    <button onclick="goBack()" class="btn btn-outline-secondary left">zurück</button>
 {% endif %}
 {% endblock content %}

@@ -6,4 +6,5 @@
     <p>Möchten Sie den Urlaub vom <b>{{ vacation.start_date|date:"d.m.Y" }}</b> bis zum <b>{{ vacation.end_date|date:"d.m.Y" }}</b> wirklich löschen?</p>
   <button type="submit" class="btn btn-outline-danger right">Bestätigen</button>
 </form>
+  <button onclick="goBack()" class="btn btn-outline-secondary left">zurück</button>
 {% endblock content %}

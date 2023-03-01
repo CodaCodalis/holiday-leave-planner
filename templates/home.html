@@ -1,45 +1,32 @@
 {% extends "base.html" %}
 {% load static %}
 {% block title %}HOPLA - Home{% endblock title %}
-
 {% block content %}
-
 {% if user.is_authenticated %}
-    <p>
-        Hallo {{ user.first_name }} {{ user.last_name }}, willkommen auf der Homepage des Urlaubsvertretungsplaners HOPLA! <br>
-    </p>
-    <p>
-        {% if conflicts_str|length == 0 %}
-            Es bestehen keine Konflikte bei der Urlaubsplanung.
-        {% else %}
-            <p>
-                <h2><span id="count"></span> Konflikte gefunden: </h2>
-            </p>
-
-            <span id="conflicts">
-               <div id="conflict0" class="conflict">
-                       Am
-                       <span id="date0" class="entry"></span> ist die Anwesenheit in
-                       <span id="team0" class="entry"></span> lediglich
-                       <span id="att0" class="entry"></span>%, soll aber
-                       <span id="min_att0" class="entry"></span>% sein.
-                </div>
-            </span>
-        {% endif %}
-    </p>
-
+    <p>Hallo {{ user.first_name }} {{ user.last_name }}, willkommen auf der Homepage des Urlaubsvertretungsplaners HOPLA!</p>
+    {% if conflicts_str|length == 0 %}
+        Es bestehen keine Konflikte bei der Urlaubsplanung.
+    {% else %}
+        <h2><span id="count"></span> Konflikte gefunden: </h2>
+        <span id="conflicts">
+           <div id="conflict0" class="conflict">
+               Am
+               <span id="date0" class="entry"></span> ist die Anwesenheit in
+               <span id="team0" class="entry"></span> lediglich
+               <span id="att0" class="entry"></span>%, soll aber
+               <span id="min_att0" class="entry"></span>% sein.
+           </div>
+        </span>
+    {% endif %}
 {% else %}
   <p>Sie sind nicht eingeloggt.</p>
   <a href="{% url 'login' %}">Log In</a> |
   <a href="{% url 'signup' %}">Sign Up</a>
 {% endif %}
-
 {% endblock content %}
-
 {% block extrascripts %}
     <script>
         var conflictsJSON = "{{ conflicts|escapejs }}";
-
     </script>
     <script src="{% static 'js/jquery-3.6.3.min.js' %}"></script>
     <script src="{% static 'js/pages_homepage.js' %}"></script>
