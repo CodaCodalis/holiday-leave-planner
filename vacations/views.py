@@ -50,13 +50,12 @@ class CalendarView(LoginRequiredMixin, ListView):
 class VacationCreateView(LoginRequiredMixin, CreateView):
     model = Vacation
     form_class = VacationNewForm
-    # fields = (
-    #     "start_date",
-    #     "end_date",
-    # )
     template_name = "vacation_new.html"
 
     def form_valid(self, form):
+        if form.instance.start_date > form.instance.end_date:
+            form.add_error('start_date', 'Urlaubsbeginn muss vor Urlaubsende liegen')
+            return self.form_invalid(form)
         form.instance.user = self.request.user
         return super().form_valid(form)
 
@@ -79,15 +78,18 @@ class VacationDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
 class VacationUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Vacation
     form_class = VacationEditForm
-    #fields = (
-    #     "start_date",
-    #     "end_date",
-    #)
     template_name = "vacation_edit.html"
 
     def test_func(self):
         obj = self.get_object()
         return obj.user == self.request.user
+
+    def form_valid(self, form):
+        if form.instance.start_date > form.instance.end_date:
+            form.add_error('start_date', 'Urlaubsbeginn muss vor Urlaubsende liegen')
+            return self.form_invalid(form)
+        form.instance.user = self.request.user
+        return super().form_valid(form)
 
 
 class VacationsOverviewView(LoginRequiredMixin, TemplateView):

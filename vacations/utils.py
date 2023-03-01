@@ -18,16 +18,17 @@ class Calendar(LocaleHTMLCalendar):
             vacationers_in_team = 0
             for vacation in vacations:
                 if vacation.is_on_date(processed_date) and user.team == vacation.user.team and user == vacation.user:
-                    d += f'<li><a class="dropdown-item" href="{vacation.get_html_url}">{vacation.user.first_name} {vacation.user.last_name}</a></li>'
+                    d += f'<li><a class="dropdown-item" href="{vacation.get_html_url}"><u>{vacation.user.first_name} {vacation.user.last_name}</u></a></li>'
                     vacationers_in_team += 1
                 elif vacation.is_on_date(processed_date) and user.team == vacation.user.team:
                     d += f'<li><a class="dropdown-item" href="#">{vacation.user.first_name} {vacation.user.last_name}</a></li>'
                     vacationers_in_team += 1
             td_class = self.get_td_class(user, vacationers_in_team)
+            teammembers = self.count_teammembers(user)
             if vacationers_in_team > 0:
                 return f'<td class="{td_class}"><span>{day}</span><div class="dropdown"><button class="btn btn-outline-secondary ' \
                        f'dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" ' \
-                       f'aria-expanded="false"></button><ul class="dropdown-menu" ' \
+                       f'aria-expanded="false">{vacationers_in_team} / {teammembers}</button><ul class="dropdown-menu" ' \
                        f'aria-labelledby="dropdownMenuButton1"> {d} </ul></div></td> '
             else:
                 return f'<td class="{td_class}"><span>{day}</span></td> '
