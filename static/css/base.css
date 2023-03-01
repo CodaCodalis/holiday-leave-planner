@@ -76,7 +76,7 @@ td.conflict-free:hover {
     background-color:#ffc0c0;
     height: 50px;
     margin: 6px;
-    padding: 6px;
+    padding: 6px 6px 6px 6px;
     border-radius: 6px;
 }
 

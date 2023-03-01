@@ -1,11 +1,11 @@
 from datetime import date
-from calendar import HTMLCalendar
+from calendar import LocaleHTMLCalendar
 from .models import Vacation
 from django.contrib.auth import get_user_model
 
 
-class Calendar(HTMLCalendar):
-    def __init__(self, year=None, month=None):
+class Calendar(LocaleHTMLCalendar):
+    def __init__(self, year=None, month=None, locale='de_DE'):
         self.year = year
         self.month = month
         super(Calendar, self).__init__()
@@ -23,7 +23,6 @@ class Calendar(HTMLCalendar):
                 elif vacation.is_on_date(processed_date) and user.team == vacation.user.team:
                     d += f'<li><a class="dropdown-item" href="#">{vacation.user.first_name} {vacation.user.last_name}</a></li>'
                     vacationers_in_team += 1
-            dot = self.get_dot(user, vacationers_in_team)
             td_class = self.get_td_class(user, vacationers_in_team)
             if vacationers_in_team > 0:
                 return f'<td class="{td_class}"><span>{day}</span><div class="dropdown"><button class="btn btn-outline-secondary ' \
@@ -57,17 +56,6 @@ class Calendar(HTMLCalendar):
             if user.team == logged_in_user.team:
                 teammembers += 1
         return teammembers
-
-    def get_dot(self, user, vacationers):
-        min_att = float(user.team.min_attendance) / 100.0
-        # min_att = 0.33
-        teammembers = self.count_teammembers(user)
-        dot_color = '#43C532'  # green
-        if vacationers > 0 and 1 - (vacationers / teammembers) >= min_att:
-            dot_color = '#F6D200'  # yellow
-        if vacationers > 0 and 1 - (vacationers / teammembers) < min_att:
-            dot_color = '#D10A11'  # red
-        return f'<font color="{dot_color}"> &#11044; </font>'
 
     def get_td_class(self, user, vacationers):
         min_att = float(user.team.min_attendance) / 100.0
