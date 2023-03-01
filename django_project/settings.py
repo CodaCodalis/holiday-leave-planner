@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'accounts.apps.AccountsConfig',
     'pages.apps.PagesConfig',
     'vacations.apps.VacationsConfig',
+    'bootstrap5',
 ]
 
 MIDDLEWARE = [
