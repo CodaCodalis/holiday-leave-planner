@@ -21,7 +21,8 @@ class Calendar(HTMLCalendar):
                     d += f'<li> {vacation.get_html_url} </li>'
                     vacationers_in_team += 1
             dot = self.get_dot(user, vacationers_in_team)
-            return f"<td><span>{day} {dot}</span><ul style='list-style-type:none'> {d} </ul></td>"
+            td_class = self.get_td_class(user, vacationers_in_team)
+            return f'<td class="{td_class}"><span>{day}</span><ul style="list-style-type:none"> {d} </ul></td>'
         return f'<td></td>'
 
     def formatweek(self, theweek, vacations, user):
@@ -32,7 +33,7 @@ class Calendar(HTMLCalendar):
 
     def formatmonth(self, user, withyear=True):
         vacations = Vacation.objects.all()
-        cal = f'<table border="0" cellpadding="0" cellspacing="0" class="calendar">\n'
+        cal = f'<table class="calendar table-primary">\n'
         cal += f'{self.formatmonthname(self.year, self.month, withyear=withyear)}\n'
         cal += f'{self.formatweekheader()}\n'
         for week in self.monthdays2calendar(self.year, self.month):
@@ -58,3 +59,13 @@ class Calendar(HTMLCalendar):
         if vacationers > 0 and 1 - (vacationers / teammembers) < min_att:
             dot_color = '#D10A11'  # red
         return f'<font color="{dot_color}"> &#11044; </font>'
+
+    def get_td_class(self, user, vacationers):
+        min_att = float(user.team.min_attendance) / 100.0
+        teammembers = self.count_teammembers(user)
+        td_class = 'conflict-free'  # green
+        if vacationers > 0 and 1 - (vacationers / teammembers) >= min_att:
+            td_class = 'warning'  # yellow
+        if vacationers > 0 and 1 - (vacationers / teammembers) < min_att:
+            td_class = 'conflict'  # red
+        return td_class

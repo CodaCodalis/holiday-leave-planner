@@ -4,8 +4,9 @@
 <head>
   <meta charset="utf-8">
   <title>{% block title %}HOPLA{% endblock title %}</title>
+    <link rel="icon" type="image/x-icon" href="{% static 'favicon.ico' %}">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'css/bootstrap.css' %}">
   <link rel="stylesheet" href="{% static 'css/base.css' %}">
 </head>
 <body>
@@ -15,9 +16,9 @@
       <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
         <a class="navbar-brand" href="{% url 'home' %}">HOPLA</a>
         <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center
-          mb-md-0">
+          mb-md-0">        </ul>
         {% if user.is_authenticated %}
-        </ul>
+
         <div class="dropdown text-end">
           <a href="#" class="d-block link-dark text-decoration-none dropdown-toggle"
             id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
@@ -37,7 +38,6 @@
           </ul>
         </div>
         {% else %}
-        </ul>
         <div class="text-end">
           <a href="{% url 'login' %}" class="btn btn-outline-primary me-2">
             Log In</a>
@@ -52,7 +52,7 @@
     {% endblock content %}
   </main>
 </div>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="{% static 'js/bootstrap.js' %}"></script>
 {% block extrascripts %}
 {% endblock extrascripts %}
 </body>

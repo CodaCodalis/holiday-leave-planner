@@ -21,7 +21,7 @@ class Vacation(models.Model):
     @property
     def get_html_url(self):
         url = reverse('vacation_detail', args=(self.pk,))
-        return f'<a href="{url}"> {self.user.first_name} {self.user.last_name} </a>'
+        return f'<a class="btn btn-outline-secondary" href="{url}"> {self.user.first_name} {self.user.last_name} </a>'
 
     def is_on_date(self, processed_date):
         if self.start_date <= processed_date <= self.end_date and processed_date.weekday() < 5:
