@@ -19,20 +19,19 @@ conflictSpanAtt.innerText = conflicts[0].att;
 conflictSpanMinAtt.innerText = conflicts[0].min_att;
 
 
-
 for (var i = 0; i < conflictsCount; i++) {
     var conflictNodeAdd = conflictNode.cloneNode(true);
-    conflictNodeAdd.setAttribute("id", "conflict" + (i+1));
+    conflictNodeAdd.setAttribute("id", "conflict" + (i + 1));
 
     conflictSpanDate = conflictNodeAdd.querySelector("#date0");
     conflictSpanTeam = conflictNodeAdd.querySelector("#team0");
     conflictSpanAtt = conflictNodeAdd.querySelector("#att0");
     conflictSpanMinAtt = conflictNodeAdd.querySelector("#min_att0");
 
-    conflictSpanDate.setAttribute("id", "date" + (i+1));
-    conflictSpanTeam.setAttribute("id", "team" + (i+1));
-    conflictSpanAtt.setAttribute("id", "att" + (i+1));
-    conflictSpanMinAtt.setAttribute("id", "min_att" + (i+1));
+    conflictSpanDate.setAttribute("id", "date" + (i + 1));
+    conflictSpanTeam.setAttribute("id", "team" + (i + 1));
+    conflictSpanAtt.setAttribute("id", "att" + (i + 1));
+    conflictSpanMinAtt.setAttribute("id", "min_att" + (i + 1));
 
     date = new Date(Date.parse(conflicts[i].date));
     formattedDate = date.toLocaleDateString();
@@ -49,6 +48,7 @@ document.getElementById("conflict0").remove();
 $('.conflict').hide();
 
 for (var i = 1; i <= conflictsCount; i++) {
+
     let id = "btn_show" + i;
     let button = document.createElement("button");
     button.setAttribute("id", id);
@@ -57,18 +57,25 @@ for (var i = 1; i <= conflictsCount; i++) {
     button.classList.add("btnmes");
     button.innerText = "anzeigen";
 
-    let year =  conflicts[i-1].date.slice(0,4);
-    let month = conflicts[i-1].date.slice(6,7);
+    let year = conflicts[i - 1].date.slice(0, 4);
+    let month = conflicts[i - 1].date.slice(6, 7);
     if (month.charAt(0) === '0') {
         month = month.substring(1);
     }
     let link = '/vacations/?month=' + year + '-' + month;
 
-    //setTimeout(function () {
-        $('#conflict' + i).append(button).show('slow');
-    //    }, i*500);
 
-    $("#btn_show" + i).on('click',function(event){
+    $("#conflict" + i).append(button);
+
+    setTimeout(function (i) {
+            $('#conflict' + i).show('slow');
+        },
+        250 * i,
+        i
+    );
+
+    $("#btn_show" + i).on('click', function (event) {
         location.href = link;
     });
+
 }
