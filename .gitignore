@@ -2,3 +2,5 @@
 .venv/
 .env
 __pycache__/
+django_project/__pycache__/
+vacations/__pycache__/
