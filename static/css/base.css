@@ -1,3 +1,8 @@
+table.calendar div {
+    display: inline-block;
+    padding: 0px 0px 0px 20px;
+}
+
 .calendar tr, .calendar td {
     border: 0;
     border-bottom: 1px solid #e0e0e0;

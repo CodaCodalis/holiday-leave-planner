@@ -6,7 +6,9 @@
   <title>{% block title %}HOPLA{% endblock title %}</title>
     <link rel="icon" type="image/x-icon" href="{% static 'favicon.ico' %}">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <link rel="stylesheet" href="{% static 'css/bootstrap.css' %}">
+  {% load bootstrap5 %}
+  {% bootstrap_css %}
+  {% bootstrap_javascript %}
   <link rel="stylesheet" href="{% static 'css/base.css' %}">
 </head>
 <body>
@@ -16,7 +18,7 @@
       <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
         <a class="navbar-brand" href="{% url 'home' %}">HOPLA</a>
         <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center
-          mb-md-0">        </ul>
+          mb-md-0"></ul>
         {% if user.is_authenticated %}
 
         <div class="dropdown text-end">
@@ -52,7 +54,6 @@
     {% endblock content %}
   </main>
 </div>
-<script src="{% static 'js/bootstrap.js' %}"></script>
 {% block extrascripts %}
 {% endblock extrascripts %}
 </body>
