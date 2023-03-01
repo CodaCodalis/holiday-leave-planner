@@ -3,7 +3,8 @@
 {% block content %}
 <h1>Löschen</h1>
 <form action="" method="post">{% csrf_token %}
-  <p>Möchten Sie den Urlaub vom {{ vacation.start_date|date:"d.m.Y" }} bis zum {{ vacation.end_date|date:"d.m.Y" }} wirklich löschen?</p>
-  <button type="submit">Bestätigen</button>
+    <p>Möchten Sie den Urlaub vom <b>{{ vacation.start_date|date:"d.m.Y" }}</b> bis zum <b>{{ vacation.end_date|date:"d.m.Y" }}</b> wirklich löschen?</p>
+  <button type="submit" class="btn btn-outline-danger right">Bestätigen</button>
 </form>
+    <a href="{% url 'vacations_overview' %}" class="btn btn-outline-secondary left">zurück</a>
 {% endblock content %}

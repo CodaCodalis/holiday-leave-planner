@@ -19,10 +19,11 @@
     height: 98%;
     margin: auto;
     font-size: 13px;
+    border: 0;
 }
 
 .infolist tr, .infolist td {
-    border: 1px solid black;
+    border: 0;
 }
 
 .infolist th {
@@ -32,10 +33,11 @@
 }
 
 .infolist td {
+    vertical-align: middle;
     text-align: center;
     width: 200px;
     height: 50px;
-    padding: 5px 0px 0px 2px;
+    font-size: 16px;
 }
 
 .conflict {
@@ -51,8 +53,25 @@
     font-weight: bold;
 }
 
-.btnmes {
+.btn-message {
     position: absolute;
     right: 10px;
 }
 
+.left {
+  float: left;
+}
+
+.right {
+  float: right;
+}
+
+.btn {
+  outline: none;
+  box-shadow: 0 0 0 0;
+  margin-right: 3px;
+}
+
+.clearfix {
+  margin: 15px;
+}

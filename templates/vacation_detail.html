@@ -2,14 +2,11 @@
 
 {% block content %}
 <div>
-  <h2>Urlaubseintrag: {{ object.user.first_name }} {{ object.user.last_name }}</h2>
-    <p>Start: {{ object.start_date }}</p>
-    <p>Ende: {{ object.end_date }}</p>
+    <h2>Detailansicht</h2>
+    <p>Urlaubseintrag von <b>{{ object.user.first_name }} {{ object.user.last_name }}</b> vom <b>{{ object.start_date|date:"d.m.Y"  }}</b> bis <b>{{ object.end_date|date:"d.m.Y"  }}</b>.
 
-    <p><a href="{% url 'vacation_edit' vacation.pk %}">Bearbeiten</a> |
-  <a href="{% url 'vacation_delete' vacation.pk %}">Löschen</a></p>
+    <p><a class="btn btn-outline-danger right" href="{% url 'vacation_delete' vacation.pk %}">Löschen</a>
+    <a class="btn btn-outline-primary right" href="{% url 'vacation_edit' vacation.pk %}">Bearbeiten</a>
+        </p>
 </div>
-
-
-<p>Zurück zum <a href="{% url 'calendar' %}">Kalender</a>.</p>
 {% endblock content %}

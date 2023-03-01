@@ -54,7 +54,7 @@ for (var i = 1; i <= conflictsCount; i++) {
     button.setAttribute("id", id);
     button.classList.add("btn");
     button.classList.add("btn-danger");
-    button.classList.add("btnmes");
+    button.classList.add("btn-message");
     button.innerText = "anzeigen";
 
     let year = conflicts[i - 1].date.slice(0, 4);
