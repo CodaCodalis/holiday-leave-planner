@@ -28,7 +28,7 @@ class Calendar(LocaleHTMLCalendar):
             if vacationers_in_team > 0:
                 return f'<td class="{td_class}"><span>{day}</span><div class="dropdown"><button class="btn btn-outline-secondary ' \
                        f'dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" ' \
-                       f'aria-expanded="false">{vacationers_in_team} / {teammembers}</button><ul class="dropdown-menu" ' \
+                       f'aria-expanded="false">{vacationers_in_team}/{teammembers}</button><ul class="dropdown-menu" ' \
                        f'aria-labelledby="dropdownMenuButton1"> {d} </ul></div></td> '
             else:
                 return f'<td class="{td_class}"><span>{day}</span></td> '

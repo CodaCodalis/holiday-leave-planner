@@ -65,7 +65,7 @@ for (var i = 1; i <= conflictsCount; i++) {
     let link = '/vacations/?month=' + year + '-' + month;
 
 
-    $("#conflict" + i).append(button);
+    $("#conflict" + i + " div.div_btn_show").append(button);
 
     setTimeout(function (i) {
             $('#conflict' + i).show('slow');

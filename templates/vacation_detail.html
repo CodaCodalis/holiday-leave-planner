@@ -3,10 +3,11 @@
 {% block content %}
 <div>
     <h2>Detailansicht</h2>
-    <p>Urlaubseintrag von <b>{{ object.user.first_name }} {{ object.user.last_name }}</b> vom <b>{{ object.start_date|date:"d.m.Y"  }}</b> bis <b>{{ object.end_date|date:"d.m.Y"  }}</b>.
-
-    <p><a class="btn btn-outline-danger right" href="{% url 'vacation_delete' vacation.pk %}">Löschen</a>
+    Urlaubseintrag von <b>{{ object.user.first_name }} {{ object.user.last_name }}</b> vom <b>{{ object.start_date|date:"d.m.Y"  }}</b> bis <b>{{ object.end_date|date:"d.m.Y"  }}</b>.
+    <p>
+    <a class="btn btn-outline-danger right" href="{% url 'vacation_delete' vacation.pk %}">Löschen</a>
     <a class="btn btn-outline-primary right" href="{% url 'vacation_edit' vacation.pk %}">Bearbeiten</a>
-        </p>
+    <a class="btn btn-outline-secondary left" href="{% url 'calendar' %}">zurück</a>
+    </p>
 </div>
 {% endblock content %}
