@@ -75,7 +75,7 @@ td.conflict-free:hover {
 .conflict {
     position: relative;
     background-color:#ffc0c0;
-    height: 50px;
+    min-height: 50px;
     margin: 6px;
     padding: 6px 6px 6px 6px;
     border-radius: 6px;
@@ -110,4 +110,9 @@ td.conflict-free:hover {
 
 #overview-back {
   margin: 10px 10px 10px 10px;
+}
+
+.div_btn_show {
+    display: flex;
+    align-items: center;
 }

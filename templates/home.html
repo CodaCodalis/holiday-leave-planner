@@ -8,15 +8,18 @@
         Es bestehen keine Konflikte bei der Urlaubsplanung.
     {% else %}
         <h2><span id="count"></span> Konflikte gefunden: </h2>
-        <span id="conflicts">
-           <div id="conflict0" class="conflict">
-               Am
-               <span id="date0" class="entry"></span> ist die Anwesenheit in
-               <span id="team0" class="entry"></span> lediglich
-               <span id="att0" class="entry"></span>%, soll aber
-               <span id="min_att0" class="entry"></span>% sein.
+        <div class="container" id="conflicts">
+           <div id="conflict0" class="conflict row">
+               <div class="col">
+                   Am
+                   <span id="date0" class="entry"></span> ist die Anwesenheit in
+                   <span id="team0" class="entry"></span> lediglich
+                   <span id="att0" class="entry"></span>%, soll aber
+                   <span id="min_att0" class="entry"></span>% sein.
+               </div>
+               <div class="col align-middle div_btn_show"></div>
            </div>
-        </span>
+        </div>
     {% endif %}
 {% else %}
   <p>Sie sind nicht eingeloggt.</p>
