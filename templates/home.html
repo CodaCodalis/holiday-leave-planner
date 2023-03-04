@@ -4,6 +4,10 @@
 {% block content %}
 {% if user.is_authenticated %}
     <p>Hallo {{ user.first_name }} {{ user.last_name }}, willkommen auf der Homepage des Urlaubsvertretungsplaners HOPLA!</p>
+    <p>{%  for date in conflict_dates %}</p>
+    <p>Am {{ date|date:"d.m.Y" }} ist die Anwesenheit zu niedrig.</p>
+    <p>{% endfor %}</p>
+
     {% if conflicts_str|length == 0 %}
         Es bestehen keine Konflikte bei der Urlaubsplanung.
     {% else %}

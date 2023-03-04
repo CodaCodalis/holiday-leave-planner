@@ -2,7 +2,7 @@ import datetime
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import TemplateView
 from vacations.models import Vacation
-from accounts.models import Team
+from accounts.models import Team, Employee
 from django.contrib.auth import get_user_model
 from json import dumps
 
@@ -10,12 +10,49 @@ from json import dumps
 class HomePageView(LoginRequiredMixin, TemplateView):
     template_name = "home.html"
     conflicts = ""
+    conflicts_team = ""
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['conflicts'] = self.find_conflicts()
         context['conflicts_str'] = self.conflicts
+        context['conflicts_team'] = self.conflicts_team
+        context['conflict_dates'] = self.find_conflicts_employees()
         return context
+
+    # iterates through all vacations and compares them to each other to display conflicts
+    def find_conflicts_employees(self):
+        user = self.request.user
+        vacations = Vacation.objects.all()
+        users = get_user_model().objects.all()
+
+        team_members = users.filter(team=user.team)
+        team_members_count = team_members.count()
+
+        # get all vacations of the user's team
+        team_vacations = vacations.filter(user__in=team_members)
+
+        # create a list of all dates of the vacations of the user's team
+        team_vacation_dates = list()
+        for vacation in team_vacations:
+            vacation_delta = vacation.end_date - vacation.start_date
+            vacation_days = vacation_delta.days
+            for processed_delta in range(0, vacation_days + 1):
+                processed_date = vacation.start_date + datetime.timedelta(days=processed_delta)
+                team_vacation_dates.append(processed_date)
+
+        # move all double dates to a new list
+        conflict_dates = list()
+        for date in team_vacation_dates:
+            if team_vacation_dates.count(date) > 1:
+                conflict_dates.append(date)
+
+        # remove all double dates from the list
+        for date in conflict_dates:
+            if conflict_dates.count(date) > 1:
+                conflict_dates.remove(date)
+
+        return conflict_dates
 
     @classmethod
     def find_conflicts(cls):
@@ -27,6 +64,7 @@ class HomePageView(LoginRequiredMixin, TemplateView):
         conflicts = list()
         conflict_dates_list = list()
         counter = 0
+
         for team in teams:
             teammembers = 0
             min_att = float(team.min_attendance) / 100
@@ -64,9 +102,9 @@ class HomePageView(LoginRequiredMixin, TemplateView):
                             conflict = {str(counter): date_team}
                             conflicts.append(conflict)
                             conflicts_list = {"date": str(processed_date),
-                                                  "team": str(user.team),
-                                                  "att": actual_att * 100,
-                                                  "min_att": min_att * 100}
+                                              "team": str(user.team),
+                                              "att": actual_att * 100,
+                                              "min_att": min_att * 100}
                             conflict_dates_list.append(conflicts_list)
         cls.conflicts = conflicts
         return dumps(conflict_dates_list)
