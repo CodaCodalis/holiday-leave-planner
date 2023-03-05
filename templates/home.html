@@ -4,14 +4,23 @@
 {% block content %}
 {% if user.is_authenticated %}
     <p>Hallo {{ user.first_name }} {{ user.last_name }}, willkommen auf der Homepage des Urlaubsvertretungsplaners HOPLA!</p>
-    <p>{%  for date in conflict_dates %}</p>
-    <p>Am {{ date|date:"d.m.Y" }} ist die Anwesenheit zu niedrig.</p>
-    <p>{% endfor %}</p>
 
-    {% if conflicts_str|length == 0 %}
+    {% if user.role == "HODiv" %}
+        <p>Sie sind als Sachgebietsleiter eingeloggt.</p>
+
+        {% if conflicts_division|length == 0 %}
+            <p>Es bestehen keine Konflikte bei der Urlaubsplanung in Ihrem Sachgebiet.</p>
+        {% else %}
+            <h2>Konflikte in {{ conflicts_division|length }} Team(s) in Ihrem Sachgebiet.</h2>
+            <br>
+            <br>
+        {% endif %}
+    {% endif %}
+
+    {% if conflicts_team|length == 0 %}
         Es bestehen keine Konflikte bei der Urlaubsplanung.
     {% else %}
-        <h2><span id="count"></span> Konflikte gefunden: </h2>
+        <h2><span id="count"></span> Konflikte in Ihrem Team gefunden: </h2>
         <div class="container" id="conflicts">
            <div id="conflict0" class="conflict row">
                <div class="col">
@@ -33,7 +42,8 @@
 {% endblock content %}
 {% block extrascripts %}
     <script>
-        var conflictsJSON = "{{ conflicts|escapejs }}";
+        var conflictsJSON = "{{ conflicts_team|escapejs }}";
+        var conflictsDivJSON = "{{ conflicts_division|escapejs }}";
     </script>
     <script src="{% static 'js/jquery-3.6.3.min.js' %}"></script>
     <script src="{% static 'js/pages_homepage.js' %}"></script>
