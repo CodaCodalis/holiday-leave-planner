@@ -2,43 +2,70 @@
 {% load static %}
 {% block title %}HOPLA - Home{% endblock title %}
 {% block content %}
-{% if user.is_authenticated %}
-    <p>Hallo {{ user.first_name }} {{ user.last_name }}, willkommen auf der Homepage des Urlaubsvertretungsplaners HOPLA!</p>
+    {% if user.is_authenticated %}
+        <p>Hallo {{ user.first_name }} {{ user.last_name }}, willkommen auf der Homepage des Urlaubsvertretungsplaners
+            HOPLA!</p>
+        {% if user.role == "HODep" %}
+            <p>Sie sind als Abteilungsleiter eingeloggt.</p>
 
-    {% if user.role == "HODiv" %}
-        <p>Sie sind als Sachgebietsleiter eingeloggt.</p>
-
-        {% if conflicts_division|length == 0 %}
-            <p>Es bestehen keine Konflikte bei der Urlaubsplanung in Ihrem Sachgebiet.</p>
-        {% else %}
-            <h2>Konflikte in {{ conflicts_division|length }} Team(s) in Ihrem Sachgebiet.</h2>
-            <br>
-            <br>
+            {% if conflicts_department|length == 0 %}
+                <p>Es bestehen keine Konflikte bei der Urlaubsplanung in Ihrer Abteilung.</p>
+            {% else %}
+                <h2>Konflikte in {{ conflicts_department|length }} Sachgebiet(en) in Ihrer Abteilung gefunden:</h2>
+                <ul>
+                    {% for conflict in conflicts_department %}
+                        <li>{{ conflict.0 }}:</li>
+                        <ul>
+                            {% for team in conflict.1 %}
+                                <li>{{ team }}</li>
+                            {% endfor %}
+                        </ul>
+                    {% endfor %}
+                </ul>
+            {% endif %}
         {% endif %}
-    {% endif %}
+        {% if user.role == "HODiv" %}
+            <p>Sie sind als Sachgebietsleiter eingeloggt.</p>
 
-    {% if conflicts_team|length == 0 %}
-        Es bestehen keine Konflikte bei der Urlaubsplanung.
+            {% if conflicts_division|length == 0 %}
+                <p>Es bestehen keine Konflikte bei der Urlaubsplanung in Ihrem Sachgebiet.</p>
+            {% else %}
+                <h2>Konflikte in {{ conflicts_division|length }} Team(s) in Ihrem Sachgebiet gefunden:</h2>
+                <ul>
+                    {% for conflict in conflicts_division %}
+                        <li>{{ conflict.0 }}:</li>
+                        <ul>
+                            {% for date in conflict.1 %}
+                                <li>{{ date|date:"d.m.Y" }}</li>
+                            {% endfor %}
+                        </ul>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        {% endif %}
+        {% if conflicts_team|length == 0 %}
+            Es bestehen keine Konflikte bei der Urlaubsplanung.
+        {% else %}
+            <h2><span id="count"></span> Konflikte in Ihrem Team gefunden: </h2>
+            <div class="container" id="conflicts">
+                <div id="conflict0" class="conflict row">
+                    <div class="col">
+                        Am
+                        <span id="date0" class="entry"></span> ist die Anwesenheit in
+                        <span id="team0" class="entry"></span> lediglich
+                        <span id="att0" class="entry"></span>%, soll aber
+                        <span id="min_att0" class="entry"></span>% sein.
+                    </div>
+                    <div class="col align-middle div_btn_show"></div>
+                </div>
+            </div>
+        {% endif %}
     {% else %}
-        <h2><span id="count"></span> Konflikte in Ihrem Team gefunden: </h2>
-        <div class="container" id="conflicts">
-           <div id="conflict0" class="conflict row">
-               <div class="col">
-                   Am
-                   <span id="date0" class="entry"></span> ist die Anwesenheit in
-                   <span id="team0" class="entry"></span> lediglich
-                   <span id="att0" class="entry"></span>%, soll aber
-                   <span id="min_att0" class="entry"></span>% sein.
-               </div>
-               <div class="col align-middle div_btn_show"></div>
-           </div>
-        </div>
+
+        <p>Sie sind nicht eingeloggt.</p>
+        <a href="{% url 'login' %}">Log In</a> |
+        <a href="{% url 'signup' %}">Sign Up</a>
     {% endif %}
-{% else %}
-  <p>Sie sind nicht eingeloggt.</p>
-  <a href="{% url 'login' %}">Log In</a> |
-  <a href="{% url 'signup' %}">Sign Up</a>
-{% endif %}
 {% endblock content %}
 {% block extrascripts %}
     <script>

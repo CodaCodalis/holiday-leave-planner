@@ -12,7 +12,7 @@ class HomePageView(LoginRequiredMixin, TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['conflicts_team'] = self.find_conflicts_team()
+        context['conflicts_team'] = json.dumps(self.find_conflicts_team())
         context['conflicts_division'] = self.find_conflicts_division()
         context['conflicts_department'] = self.find_conflicts_department()
         return context
@@ -22,51 +22,83 @@ class HomePageView(LoginRequiredMixin, TemplateView):
         divisions = Division.objects.filter(department=self.request.user.team.division.department)
 
         # get all conflicts of all divisions in the user's department
-        conflicts = list()
+        conflicts_by_division = list()
         for division in divisions:
-            conflicts.append(self.find_conflicts_division(division))
+            conflicts_by_division.append(self.find_conflicts_division(division))
 
-        return conflicts
+        # get all teams with conflicts
+        conflicts_department = list()
+        for conflicts in conflicts_by_division:
+            divisions = list()
+            teams = list()
+            division = None
+            for conflict in conflicts:
+                teams.append(conflict[0])
+                division = self.request.user.team.division
+
+            if division is not None:
+                divisions.append(division)
+                divisions.append(teams)
+
+            if divisions:
+                conflicts_department.append(divisions)
+
+        print(conflicts_department)
+
+        return conflicts_department
 
     def find_conflicts_division(self, division=None):
         # get all teams of the user's division
         if division is None:
             teams = Team.objects.filter(division=self.request.user.team.division)
-            for team in teams:
-                json_conflicts = json.loads(self.find_conflicts_team(team))
-                print(json_conflicts)
         else:
             teams = Team.objects.filter(division=division)
 
         # get all conflicts of all teams in the user's division
-        conflicts = list()
+        conflicts_by_team = list()
         for team in teams:
-            if self.find_conflicts_team(team) and not self.find_conflicts_team(team) == "[]":
-                conflicts.append(self.find_conflicts_team(team))
+            conflicts_by_team.append(self.find_conflicts_team(team))
 
-        return conflicts
+        conflicts_divison = list()
+        for conflicts in conflicts_by_team:
+            teams = list()
+            dates = list()
+            team = None
+            for conflict in conflicts:
+                dates.append(datetime.datetime.strptime(conflict['date'], '%Y-%m-%d'))
+                team = conflict['team']
+
+            if team is not None:
+                teams.append(team)
+                teams.append(dates)
+
+            if teams:
+                conflicts_divison.append(teams)
+
+        return conflicts_divison
 
     def find_conflicts_team(self, team=None):
-        user = self.request.user
+        if team is None:
+            user = self.request.user
+            team = user.team
+
+        # get all vacations and users
         vacations = Vacation.objects.all()
         users = get_user_model().objects.all()
 
-        if team is None:
-            team = user.team
-        else:
-            team = team
-
-        conflict_dates_helper = list()
-        conflict_dates_list = list()
+        # filter all vacations and users of the user's team
+        vacations = vacations.filter(user__team=team)
+        users = users.filter(team=team)
 
         # get count of user's team members
-        team_members = users.filter(team=team)
-        team_members_count = team_members.count()
+        team_members_count = users.count()
 
+        # min attendance of processed team
         min_att = float(team.min_attendance) / 100
 
-        # filter all vacations of the user's team
-        vacations = vacations.filter(user__team=team)
+        # find conflicts
+        conflict_dates_helper = list()
+        conflicts = list()
 
         for vacation in vacations:
             vacation_delta = vacation.end_date - vacation.start_date
@@ -87,12 +119,11 @@ class HomePageView(LoginRequiredMixin, TemplateView):
                     actual_att = 1 - (vacationers_on_processed_date / team_members_count)
                     if processed_date not in conflict_dates_helper:
                         conflict_dates_helper.append(processed_date)
-                        conflicts_list = {"date": str(processed_date),
-                                          "team": str(team),
-                                          "att": actual_att * 100,
-                                          "min_att": min_att * 100}
-                        conflict_dates_list.append(conflicts_list)
-        conflict_dates_json = json.loads(json.dumps(conflict_dates_list))
-        sorted_conflict_dates_json = sorted(conflict_dates_json, key=lambda k: k['date'])
+                        conflict = {"date": str(processed_date),
+                                    "team": str(team),
+                                    "att": actual_att * 100,
+                                    "min_att": min_att * 100}
+                        conflicts.append(conflict)
+        sorted_conflicts = sorted(conflicts, key=lambda k: k['date'])
 
-        return json.dumps(sorted_conflict_dates_json)
+        return sorted_conflicts
