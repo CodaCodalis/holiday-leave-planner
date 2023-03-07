@@ -75,8 +75,8 @@ class Employee(AbstractUser):
     supervisor = models.ForeignKey(
         'self',
         on_delete=models.CASCADE,
-        null=True,
-        blank=True,
+        null=False,
+        blank=False,
     )
     team = models.ForeignKey(
         "Team",
@@ -86,10 +86,10 @@ class Employee(AbstractUser):
     )
 
     class Role(models.TextChoices):
-        HODEP = ("HODep", "head of department")
-        HODIV = ("HODiv", "head of division")
-        HOT = ("HOT", "head of team")
-        EMP = ("Emp", "employee")
+        HODEP = ("HODep", "Head of Department")
+        HODIV = ("HODiv", "Head of Division")
+        HOT = ("HOT", "Head of Team")
+        EMP = ("Emp", "Employee")
 
     role = models.CharField(
         max_length=5,

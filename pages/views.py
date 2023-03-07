@@ -43,7 +43,7 @@ class HomePageView(LoginRequiredMixin, TemplateView):
             if divisions:
                 conflicts_department.append(divisions)
 
-        print(conflicts_department)
+        # print(conflicts_department)
 
         return conflicts_department
 
@@ -74,6 +74,8 @@ class HomePageView(LoginRequiredMixin, TemplateView):
 
             if teams:
                 conflicts_divison.append(teams)
+
+        # print(conflicts_divison)
 
         return conflicts_divison
 
@@ -125,5 +127,7 @@ class HomePageView(LoginRequiredMixin, TemplateView):
                                     "min_att": min_att * 100}
                         conflicts.append(conflict)
         sorted_conflicts = sorted(conflicts, key=lambda k: k['date'])
+
+        # print(sorted_conflicts)
 
         return sorted_conflicts

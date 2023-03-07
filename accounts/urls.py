@@ -4,7 +4,8 @@ from .views import (SignUpView,
                     UserInfoChangeDoneView,
                     TeamChangeView,
                     TeamChangeDoneView,
-                    TeamsEditView)
+                    TeamsEditView,
+                    get_teams)
 
 urlpatterns = [
     path("signup/", SignUpView.as_view(), name="signup"),
@@ -13,4 +14,5 @@ urlpatterns = [
     path("teams_edit/", TeamsEditView.as_view(), name="teams_edit"),
     path("team_change/<int:pk>/", TeamChangeView.as_view(), name="team_change"),
     path("team_change_done/", TeamChangeDoneView.as_view(), name="team_change_done"),
+    path("get_teams/<int:division_id>/", get_teams, name="get_teams"),
 ]

@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load static %}
 {% load crispy_forms_tags %}
 
 {% block title %}Sign Up{% endblock title %}
@@ -11,3 +12,8 @@
 </form>
   <button onclick="goBack()" class="btn btn-outline-secondary left">zurück</button>
 {% endblock content %}
+
+{% block extrascripts %}
+    <script src="{% static 'js/jquery-3.6.3.min.js' %}"></script>
+    <script src="{% static 'js/accounts_signup.js' %}"></script>
+{% endblock extrascripts %}

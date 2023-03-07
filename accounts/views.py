@@ -1,4 +1,7 @@
+from django import http
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.http import Http404
+from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, UpdateView, TemplateView
 from .models import Employee, Team
@@ -48,3 +51,8 @@ class TeamsEditView(LoginRequiredMixin, TemplateView):
         context = super().get_context_data(**kwargs)
         context['teams'] = Team.objects.all()
         return context
+
+
+def get_teams(request, division_id):
+    teams = Team.objects.filter(division_id=division_id).order_by('name')
+    return render(request, 'registration/team_dropdown_list_options.html', {'teams': teams})

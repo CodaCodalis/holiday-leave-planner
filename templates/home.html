@@ -5,9 +5,10 @@
     {% if user.is_authenticated %}
         <p>Hallo {{ user.first_name }} {{ user.last_name }}, willkommen auf der Homepage des Urlaubsvertretungsplaners
             HOPLA!</p>
+
+        <!-- Head of Department -->
         {% if user.role == "HODep" %}
             <p>Sie sind als Abteilungsleiter eingeloggt.</p>
-
             {% if conflicts_department|length == 0 %}
                 <p>Es bestehen keine Konflikte bei der Urlaubsplanung in Ihrer Abteilung.</p>
             {% else %}
@@ -24,9 +25,10 @@
                 </ul>
             {% endif %}
         {% endif %}
+
+        <!-- Head of division -->
         {% if user.role == "HODiv" %}
             <p>Sie sind als Sachgebietsleiter eingeloggt.</p>
-
             {% if conflicts_division|length == 0 %}
                 <p>Es bestehen keine Konflikte bei der Urlaubsplanung in Ihrem Sachgebiet.</p>
             {% else %}
@@ -43,25 +45,29 @@
                 </ul>
             {% endif %}
         {% endif %}
-        {% if conflicts_team|length == 0 %}
-            Es bestehen keine Konflikte bei der Urlaubsplanung.
-        {% else %}
-            <h2><span id="count"></span> Konflikte in Ihrem Team gefunden: </h2>
-            <div class="container" id="conflicts">
-                <div id="conflict0" class="conflict row">
-                    <div class="col">
-                        Am
-                        <span id="date0" class="entry"></span> ist die Anwesenheit in
-                        <span id="team0" class="entry"></span> lediglich
-                        <span id="att0" class="entry"></span>%, soll aber
-                        <span id="min_att0" class="entry"></span>% sein.
+
+        <!-- Employees -->
+        {% if user.role == "Emp" or user.role == "HOT" %}
+            <p>Sie sind als Mitarbeiter eingeloggt.</p>
+            {% if conflicts_team|length <= 2 %}
+                Es bestehen keine Konflikte bei der Urlaubsplanung
+            {% else %}
+                <h2><span id="count"></span> Konflikte in Ihrem Team gefunden: </h2>
+                <div class="container" id="conflicts">
+                    <div id="conflict0" class="conflict row">
+                        <div class="col">
+                            Am
+                            <span id="date0" class="entry"></span> ist die Anwesenheit in
+                            <span id="team0" class="entry"></span> lediglich
+                            <span id="att0" class="entry"></span>%, soll aber
+                            <span id="min_att0" class="entry"></span>% sein.
+                        </div>
+                        <div class="col align-middle div_btn_show"></div>
                     </div>
-                    <div class="col align-middle div_btn_show"></div>
                 </div>
-            </div>
+            {% endif %}
         {% endif %}
     {% else %}
-
         <p>Sie sind nicht eingeloggt.</p>
         <a href="{% url 'login' %}">Log In</a> |
         <a href="{% url 'signup' %}">Sign Up</a>

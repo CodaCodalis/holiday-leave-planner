@@ -18,11 +18,13 @@ class EmployeeAdmin(UserAdmin):
         "email",
         "reg_num",
         "supervisor",
+        "division",
         "team",
         "role",
     ]
     fieldsets = UserAdmin.fieldsets + ((None, {"fields": ("reg_num",
                                                           "supervisor",
+                                                          "division",
                                                           "team",
                                                           "role",
                                                           )}),)
@@ -31,6 +33,7 @@ class EmployeeAdmin(UserAdmin):
                                                                   "email",
                                                                   "reg_num",
                                                                   "supervisor",
+                                                                  "division",
                                                                   "team",
                                                                   "role",
                                                                   )}),)
