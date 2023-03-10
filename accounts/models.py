@@ -56,7 +56,7 @@ class Team(models.Model):
     min_attendance = models.CharField(
         max_length=3,
         choices=MinAttendance.choices,
-        default=100,
+        default=MinAttendance.ALL,
     )
 
     division = models.ForeignKey(
@@ -94,5 +94,5 @@ class Employee(AbstractUser):
     role = models.CharField(
         max_length=5,
         choices=Role.choices,
-        default="Emp",
+        default=Role.EMP,
     )
