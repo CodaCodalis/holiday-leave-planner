@@ -42,6 +42,14 @@ class EmployeeCreationForm(UserCreationForm):
 
 
 class EmployeeChangeForm(forms.ModelForm):
+    email = forms.EmailField(required=True)
+    first_name = forms.CharField(required=True)
+    last_name = forms.CharField(required=True)
+    reg_num = forms.CharField(required=False, disabled=True)
+    supervisor = forms.ModelChoiceField(queryset=Employee.objects.filter(role='HODiv'), required=True)
+    division = forms.ModelChoiceField(queryset=Division.objects.all(), disabled=True)
+    team = forms.ModelChoiceField(queryset=Team.objects.none(), disabled=True)
+    role = forms.ChoiceField(disabled=True, choices=Employee.Role.choices)
     class Meta:
         model = Employee
         fields = (
