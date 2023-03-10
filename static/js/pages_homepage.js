@@ -38,8 +38,8 @@ for (var i = 0; i < conflictsCount; i++) {
 
     conflictSpanDate.innerText = formattedDate;
     conflictSpanTeam.innerText = conflicts[i].team;
-    conflictSpanAtt.innerText = Number((conflicts[i].att).toFixed(2));
-    conflictSpanMinAtt.innerText = Number((conflicts[i].min_att).toFixed(2));
+    conflictSpanAtt.innerText = conflicts[i].att;
+    conflictSpanMinAtt.innerText = conflicts[i].min_att;
 
     conflictsNode.appendChild(conflictNodeAdd);
 }

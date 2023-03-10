@@ -123,7 +123,7 @@ class HomePageView(LoginRequiredMixin, TemplateView):
                         conflict_dates_helper.append(processed_date)
                         conflict = {"date": str(processed_date),
                                     "team": str(team),
-                                    "att": actual_att * 100,
+                                    "att": round(actual_att * 100, 1),
                                     "min_att": min_att * 100}
                         conflicts.append(conflict)
         sorted_conflicts = sorted(conflicts, key=lambda k: k['date'])
