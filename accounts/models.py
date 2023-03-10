@@ -75,14 +75,14 @@ class Employee(AbstractUser):
     supervisor = models.ForeignKey(
         'self',
         on_delete=models.CASCADE,
-        null=False,
-        blank=False,
+        null=True,
+        blank=True,
     )
     team = models.ForeignKey(
         "Team",
         on_delete=models.CASCADE,
-        null=False,
-        blank=False,
+        null=True,
+        blank=True,
     )
 
     class Role(models.TextChoices):
