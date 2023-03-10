@@ -54,7 +54,7 @@ class Team(models.Model):
         ALL = ("100", "100%")
 
     min_attendance = models.CharField(
-        max_length=3,
+        max_length=4,
         choices=MinAttendance.choices,
         default=MinAttendance.ALL,
     )
@@ -92,7 +92,7 @@ class Employee(AbstractUser):
         EMP = ("Emp", "Employee")
 
     role = models.CharField(
-        max_length=5,
+        max_length=18,
         choices=Role.choices,
         default=Role.EMP,
     )
