@@ -23,11 +23,11 @@ table.calendar div {
 }
 
 td.conflict {
-    background-color: #fa8072;
+    background-color: #ffc0c0;
 }
 
 td.conflict:hover {
-    background-color: #ff6347;
+    background-color: #ffc6d2;
 }
 
 td.warning {
