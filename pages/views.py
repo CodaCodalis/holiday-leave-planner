@@ -1,9 +1,10 @@
 import datetime
+import math
+
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import TemplateView
 from vacations.models import Vacation
 from accounts.models import Division, Team, Employee
-from django.contrib.auth import get_user_model
 import json
 
 
@@ -12,7 +13,7 @@ class HomePageView(LoginRequiredMixin, TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['conflicts_team'] = json.dumps(self.find_conflicts_team())
+        context['conflicts_team'] = json.dumps(self.detect_conflicts_in_team_and_return_list())
         context['conflicts_division'] = self.find_conflicts_division()
         context['conflicts_department'] = self.find_conflicts_department()
         return context
@@ -43,8 +44,6 @@ class HomePageView(LoginRequiredMixin, TemplateView):
             if divisions:
                 conflicts_department.append(divisions)
 
-        # print(conflicts_department)
-
         return conflicts_department
 
     def find_conflicts_division(self, division=None):
@@ -57,7 +56,7 @@ class HomePageView(LoginRequiredMixin, TemplateView):
         # get all conflicts of all teams in the user's division
         conflicts_by_team = list()
         for team in teams:
-            conflicts_by_team.append(self.find_conflicts_team(team))
+            conflicts_by_team.append(self.detect_conflicts_in_team_and_return_list(team))
 
         conflicts_divison = list()
         for conflicts in conflicts_by_team:
@@ -75,59 +74,54 @@ class HomePageView(LoginRequiredMixin, TemplateView):
             if teams:
                 conflicts_divison.append(teams)
 
-        # print(conflicts_divison)
-
         return conflicts_divison
 
-    def find_conflicts_team(self, team=None):
+    def detect_conflicts_in_team_and_return_list(self, team=None):
         if team is None:
-            user = self.request.user
-            team = user.team
+            team = self.request.user.team
 
-        # get all vacations and users
-        vacations = Vacation.objects.all()
-        users = get_user_model().objects.all()
+        team_vacation_objects = self.get_vacation_objects_of_team(team)
+        team_members_count = self.get_number_of_employee_objects_in_team(team)
+        team_min_att = self.get_min_attendance_of_team(team)
+        team_vacation_dates = self.get_vacation_dates(team_vacation_objects)
+        team_conflicts_list = self.create_conflicts_list(team_vacation_dates, team_min_att, team_members_count, team)
 
-        # filter all vacations and users of the user's team
-        vacations = vacations.filter(user__team=team)
-        users = users.filter(team=team)
+        return team_conflicts_list
 
-        # get count of user's team members
-        team_members_count = users.count()
+    def get_min_attendance_of_team(self, team):
+        return float(team.min_attendance) / 100
 
-        # min attendance of processed team
-        min_att = float(team.min_attendance) / 100
+    def get_number_of_employee_objects_in_team(self, team):
+        return Employee.objects.all().filter(team=team).count()
+    def get_vacation_objects_of_team(self, team):
+        return Vacation.objects.all().filter(user__team=team)
+    def get_vacation_length(self, vacation):
+        return (vacation.end_date - vacation.start_date).days
 
-        # find conflicts
-        conflict_dates_helper = list()
-        conflicts = list()
-
+    def get_vacation_dates(self, vacations):
+        vacation_dates = list()
         for vacation in vacations:
-            vacation_delta = vacation.end_date - vacation.start_date
-            vacation_days = vacation_delta.days
-            for processed_delta in range(0, vacation_days + 1):
-                processed_date = vacation.start_date + datetime.timedelta(days=processed_delta)
-                vacationers_on_processed_date = 1
-                for compared_vacation in vacations:
-                    if not vacation.user == compared_vacation.user:
-                        compared_vacation_delta = compared_vacation.end_date - compared_vacation.start_date
-                        compared_vacation_days = compared_vacation_delta.days
-                        for compared_processed_delta in range(0, compared_vacation_days + 1):
-                            compared_processed_date = compared_vacation.start_date + datetime.timedelta(
-                                days=compared_processed_delta)
-                            if processed_date == compared_processed_date:
-                                vacationers_on_processed_date += 1
-                if team_members_count > 0 and 1 - (vacationers_on_processed_date / team_members_count) < min_att:
-                    actual_att = 1 - (vacationers_on_processed_date / team_members_count)
-                    if processed_date not in conflict_dates_helper:
-                        conflict_dates_helper.append(processed_date)
-                        conflict = {"date": str(processed_date),
-                                    "team": str(team),
-                                    "att": round(actual_att * 100, 1),
-                                    "min_att": min_att * 100}
-                        conflicts.append(conflict)
-        sorted_conflicts = sorted(conflicts, key=lambda k: k['date'])
+            vacation_length = self.get_vacation_length(vacation)
+            for processed_delta in range(0, vacation_length + 1):
+                vacation_date = vacation.start_date + datetime.timedelta(days=processed_delta)
+                vacation_dates.append(vacation_date)
+        return vacation_dates
 
-        # print(sorted_conflicts)
+    def get_occurences_of_dates(self, vacation_dates):
+        return {i: vacation_dates.count(i) for i in vacation_dates}
 
-        return sorted_conflicts
+    def compute_num_required_employees(self, num_team_members, min_attendance):
+        return math.ceil(num_team_members * float(min_attendance) / 100)
+
+    def create_conflicts_list(self, vacation_dates, min_att, num_team_members, team):
+        vacation_dates_occurrences_dict = self.get_occurences_of_dates(vacation_dates)
+        num_required_employees = self.compute_num_required_employees(num_team_members, team.min_attendance)
+        conflicts_list = list()
+        for occurrence in vacation_dates_occurrences_dict:
+            if vacation_dates_occurrences_dict[occurrence] > (num_team_members - num_required_employees):
+                conflict_dict = {"date": str(occurrence),
+                                  "team": str(team),
+                                  "att": round(vacation_dates_occurrences_dict[occurrence] / num_team_members * 100, 1),
+                                  "min_att": min_att * 100}
+                conflicts_list.append(conflict_dict)
+        return conflicts_list

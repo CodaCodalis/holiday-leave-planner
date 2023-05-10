@@ -3,7 +3,7 @@
 {% block title %}HOPLA - Home{% endblock title %}
 {% block content %}
     {% if user.is_authenticated %}
-        <p>Hallo {{ user.first_name }} {{ user.last_name }}, willkommen auf der Homepage des Urlaubsvertretungsplaners
+        <p>Hallo {{ user.first_name }} {{ user.last_name }} aus dem Team {{ user.team }}, willkommen auf der Homepage des Urlaubsvertretungsplaners
             HOPLA!</p>
 
         <!-- Head of Department -->
