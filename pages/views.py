@@ -19,13 +19,21 @@ class HomePageView(LoginRequiredMixin, TemplateView):
         return context
 
     def collect_conflicts_in_department_and_return_list(self):
-        # get all divisions of the user's department
         divisions = self.get_all_divisions_of_department()
-
-        # get all conflicts of all divisions in the user's department
         conflicts_in_divisions = self.get_list_of_conflicts_in_divisions(divisions)
+        teams_with_conflicts_by_division = self.get_teams_with_conflicts_by_division(conflicts_in_divisions)
+        return teams_with_conflicts_by_division
 
-        # get all teams with conflicts
+    def get_all_divisions_of_department(self):
+        return Division.objects.filter(department=self.request.user.team.division.department)
+
+    def get_list_of_conflicts_in_divisions(self, divisions):
+        conflicts_in_divisions = list()
+        for division in divisions:
+            conflicts_in_divisions.append(self.collect_conflicts_in_division_and_return_list(division))
+        return conflicts_in_divisions
+
+    def get_teams_with_conflicts_by_division(self, conflicts_in_divisions):
         conflicts_department = list()
         for conflicts in conflicts_in_divisions:
             divisions = list()
@@ -34,52 +42,43 @@ class HomePageView(LoginRequiredMixin, TemplateView):
             for conflict in conflicts:
                 teams.append(conflict[0])
                 division = self.request.user.team.division
-
             if division is not None:
                 divisions.append(division)
                 divisions.append(teams)
-
             if divisions:
                 conflicts_department.append(divisions)
-
         return conflicts_department
 
-    def get_all_divisions_of_department(self):
-        return Division.objects.filter(department=self.request.user.team.division.department)
-    def get_list_of_conflicts_in_divisions(self, divisions):
-        conflicts_in_divisions = list()
-        for division in divisions:
-            conflicts_in_divisions.append(self.collect_conflicts_in_division_and_return_list(division))
-        return conflicts_in_divisions
     def collect_conflicts_in_division_and_return_list(self, division=None):
         # get all teams of the user's division
         if division is None:
             teams = Team.objects.filter(division=self.request.user.team.division)
         else:
             teams = Team.objects.filter(division=division)
+        conflicts_in_division_by_team = self.get_all_conflicts_in_division_by_team(teams)
+        conflicts_division = self.get_conflicts_in_division(conflicts_in_division_by_team)
+        return conflicts_division
 
-        # get all conflicts of all teams in the user's division
-        conflicts_by_team = list()
-        for team in teams:
-            conflicts_by_team.append(self.reveal_conflicts_in_team_and_return_list(team))
-
-        conflicts_divison = list()
-        for conflicts in conflicts_by_team:
+    def get_conflicts_in_division(self, conflicts_in_division_by_team):
+        conflicts_division = list()
+        for conflicts in conflicts_in_division_by_team:
             teams = list()
             dates = list()
             team = None
             for conflict in conflicts:
                 dates.append(datetime.datetime.strptime(conflict['date'], '%Y-%m-%d'))
                 team = conflict['team']
-
             if team is not None:
                 teams.append(team)
                 teams.append(dates)
-
             if teams:
-                conflicts_divison.append(teams)
+                conflicts_division.append(teams)
 
-        return conflicts_divison
+    def get_all_conflicts_in_division_by_team(self, teams):
+        conflicts_by_team = list()
+        for team in teams:
+            conflicts_by_team.append(self.reveal_conflicts_in_team_and_return_list(team))
+        return conflicts_by_team
 
     def reveal_conflicts_in_team_and_return_list(self, team=None):
         if team is None:
