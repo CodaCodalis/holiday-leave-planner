@@ -19,13 +19,14 @@ class HomePageView(LoginRequiredMixin, TemplateView):
         return context
 
     def collect_conflicts_in_department_and_return_list(self):
-        divisions = self.get_all_divisions_of_department()
+        department = self.request.user.team.division.department
+        divisions = self.get_all_divisions_of_department(department)
         conflicts_in_divisions = self.get_list_of_conflicts_in_divisions(divisions)
         teams_with_conflicts_by_division = self.get_teams_with_conflicts_by_division(conflicts_in_divisions)
         return teams_with_conflicts_by_division
 
-    def get_all_divisions_of_department(self):
-        return Division.objects.filter(department=self.request.user.team.division.department)
+    def get_all_divisions_of_department(self, department):
+        return Division.objects.filter(department=department)
 
     def get_list_of_conflicts_in_divisions(self, divisions):
         conflicts_in_divisions = list()
@@ -34,7 +35,7 @@ class HomePageView(LoginRequiredMixin, TemplateView):
         return conflicts_in_divisions
 
     def get_teams_with_conflicts_by_division(self, conflicts_in_divisions):
-        conflicts_department = list()
+        conflicts_by_division = list()
         for conflicts in conflicts_in_divisions:
             divisions = list()
             teams = list()
@@ -46,11 +47,10 @@ class HomePageView(LoginRequiredMixin, TemplateView):
                 divisions.append(division)
                 divisions.append(teams)
             if divisions:
-                conflicts_department.append(divisions)
-        return conflicts_department
+                conflicts_by_division.append(divisions)
+        return conflicts_by_division
 
     def collect_conflicts_in_division_and_return_list(self, division=None):
-        # get all teams of the user's division
         if division is None:
             teams = Team.objects.filter(division=self.request.user.team.division)
         else:
@@ -60,7 +60,7 @@ class HomePageView(LoginRequiredMixin, TemplateView):
         return conflicts_division
 
     def get_conflicts_in_division(self, conflicts_in_division_by_team):
-        conflicts_division = list()
+        conflicts_by_team = list()
         for conflicts in conflicts_in_division_by_team:
             teams = list()
             dates = list()
@@ -72,7 +72,8 @@ class HomePageView(LoginRequiredMixin, TemplateView):
                 teams.append(team)
                 teams.append(dates)
             if teams:
-                conflicts_division.append(teams)
+                conflicts_by_team.append(teams)
+        return conflicts_by_team
 
     def get_all_conflicts_in_division_by_team(self, teams):
         conflicts_by_team = list()
@@ -127,7 +128,10 @@ class HomePageView(LoginRequiredMixin, TemplateView):
         return conflicts_list
 
     def get_num_of_occurences_of_dates(self, vacation_dates):
-        return {i: vacation_dates.count(i) for i in vacation_dates}
+        occurrences_dict = dict()
+        for vacation_date in vacation_dates:
+            occurrences_dict[vacation_date] = vacation_dates.count(vacation_date)
+        return occurrences_dict
 
     def compute_num_required_employees(self, num_team_members, min_attendance):
         return math.ceil(num_team_members * float(min_attendance) / 100)
